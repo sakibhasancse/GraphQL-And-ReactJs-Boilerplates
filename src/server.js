@@ -19,16 +19,42 @@ const typeDefs = `
     }
 
 `
+const users = [
+    { id: 1, name: 'sakib', email: 'sakib@gain.com', phone: '123' },
+    { id: 2, name: 'John', email: 'john@gain.com', phone: '123' },
+    { id: 3, name: 'mokbul', email: 'mokbul@gain.com', phone: '123' },
+    { id: 4, name: 'sa', email: 'mokbul@gain.com', phone: '123' }
+]
+
+const posts = [
+    { id: 12, title: 'sakib', description: 'sadasdas' },
+    { id: 12, title: 'John', description: 'sadasdas' },
+    { id: 12, title: 'mokbul', description: 'sadasdas' },
+    { id: 12, title: 'sa', description: 'sadasdas' }
+]
 
 
 const resolvers = {
     Query: {
-        Users: () => {
+        Users: (_, args) => {
+            console.log(args)
+            if (!args.query) {
+                return users
+            }
 
-            return { id: 'asdasdas', "name": "sada", "email": "asd", "phone": "asdas" }
+            return users.filter(user => user.name.toLowerCase().includes(args.query.toLowerCase()))
+
         },
-        Posts: (_, { title, description }) => {
-            return { id: 'asdasdas', title, description }
+        Posts: (_, args) => {
+            if (!args.query) {
+                return posts
+            }
+            return posts.filter(post => {
+                const isTitleMatch = post.name.toLowerCase().includes(args.query.toLowerCase());
+                const isBodyMatch = post.body.toLowerCase().includes(args.query.toLowerCase());
+                return isTitleMatch || isBodyMatch;
+            })
+
         }
     }
 }
