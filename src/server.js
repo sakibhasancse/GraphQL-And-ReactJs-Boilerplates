@@ -5,7 +5,8 @@ const typeDefs = `
         id: ID!,
         name: String!,
         email: String!,
-        phone: String!
+        phone: String!,
+        post: [Posts!]!
     }
 
     type Posts {
@@ -21,10 +22,10 @@ const typeDefs = `
 
 `
 const users = [
-    { id: 1, name: 'sakib', email: 'sakib@gain.com', phone: '123' },
-    { id: 2, name: 'John', email: 'john@gain.com', phone: '123' },
-    { id: 3, name: 'mokbul', email: 'mokbul@gain.com', phone: '123' },
-    { id: 4, name: 'sa', email: 'mokbul@gain.com', phone: '123' },
+    { id: 1, name: 'sakib', email: 'sakib@gain.com', phone: '123', posts: 12 },
+    { id: 2, name: 'John', email: 'john@gain.com', phone: '123', posts: 13 },
+    { id: 3, name: 'mokbul', email: 'mokbul@gain.com', phone: '123', posts: 15 },
+    { id: 4, name: 'sa', email: 'mokbul@gain.com', phone: '123', posts: 14 },
 
 ]
 
@@ -67,6 +68,14 @@ const resolvers = {
 
         }
 
+    },
+    Users: {
+        post(parent, args) {
+            return posts.filter((post) => {
+                return post.author === parent.id
+            })
+
+        }
     }
 }
 
