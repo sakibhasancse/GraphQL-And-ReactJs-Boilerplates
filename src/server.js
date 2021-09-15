@@ -12,10 +12,11 @@ const typeDefs = `
         id: ID!,
         title: String!,
         description: String!,
+        author: Users!
     }
     type Query {
-        Posts(title: String, description: String): Posts!
-        Users: Users! 
+        post(query: String): [Posts!]!
+        user(query: String): [Users!]! 
     }
 
 `
@@ -23,20 +24,21 @@ const users = [
     { id: 1, name: 'sakib', email: 'sakib@gain.com', phone: '123' },
     { id: 2, name: 'John', email: 'john@gain.com', phone: '123' },
     { id: 3, name: 'mokbul', email: 'mokbul@gain.com', phone: '123' },
-    { id: 4, name: 'sa', email: 'mokbul@gain.com', phone: '123' }
+    { id: 4, name: 'sa', email: 'mokbul@gain.com', phone: '123' },
+
 ]
 
 const posts = [
-    { id: 12, title: 'sakib', description: 'sadasdas' },
-    { id: 12, title: 'John', description: 'sadasdas' },
-    { id: 12, title: 'mokbul', description: 'sadasdas' },
-    { id: 12, title: 'sa', description: 'sadasdas' }
+    { id: 12, title: 'sakib', description: 'sadasdas', author: 1 },
+    { id: 13, title: 'John', description: 'sadasdas', author: 2 },
+    { id: 14, title: 'mokbul', description: 'sadasdas', author: 3 },
+    { id: 15, title: 'sa', description: 'sadasdas', author: 4 }
 ]
 
 
 const resolvers = {
     Query: {
-        Users: (_, args) => {
+        user: (_, args) => {
             console.log(args)
             if (!args.query) {
                 return users
@@ -45,7 +47,7 @@ const resolvers = {
             return users.filter(user => user.name.toLowerCase().includes(args.query.toLowerCase()))
 
         },
-        Posts: (_, args) => {
+        post: (_, args) => {
             if (!args.query) {
                 return posts
             }
@@ -56,6 +58,15 @@ const resolvers = {
             })
 
         }
+    },
+    Posts: {
+        author(parent, args) {
+            return users.find((user) => {
+                return user.id === parent.author;
+            })
+
+        }
+
     }
 }
 
