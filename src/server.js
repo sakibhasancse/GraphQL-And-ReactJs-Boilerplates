@@ -28,7 +28,6 @@ const users = [
     { id: 4, name: 'sa', email: 'mokbul@gain.com', phone: '123', posts: 14 },
 
 ]
-
 const posts = [
     { id: 12, title: 'sakib', description: 'sadasdas', author: 1 },
     { id: 13, title: 'John', description: 'sadasdas', author: 2 },
