@@ -1,39 +1,6 @@
 import { GraphQLServer } from 'graphql-yoga';
 import { v4 } from 'uuid';
 
-const typeDefs = `
-    type Users {
-        id: ID!,
-        name: String!,
-        email: String!,
-        phone: String!,
-        post: [Posts!]!
-        comments: [Comments!]!
-    }
-    type Comments{
-        id: ID!,
-        text: String!,
-        postId: Posts!,
-        author: Users!,
-    }
-    type Posts {
-        id: ID!,
-        title: String!,
-        description: String!,
-        author: Users!,
-        comments: [Comments!]!
-    }
-
-    type Mutation {
-        createUser(name: String!, email: String!, phone: String!): Users!
-    }
-    type Query {
-        post(query: String): [Posts!]!
-        user(query: String): [Users!]!
-        Comments(query: String): [Comments!]!
-    }
-
-`
 const users = [
     { id: 1, name: 'sakib', email: 'sakib@gain.com', phone: '123', posts: 12 },
     { id: 2, name: 'John', email: 'john@gain.com', phone: '123', posts: 13 },
@@ -56,6 +23,44 @@ const comments = [
     { id: 16, author: 4, postId: 14, text: 'second, world commnt' },
     { id: 15, author: 4, postId: 14, text: 'Hello, world commnt' }
 ]
+
+
+const typeDefs = `
+    type Users {
+        id: ID!,
+        name: String!,
+        email: String!,
+        phone: String!,
+        post: [Posts!]!
+        comments: [Comments!]!
+    }
+    type Comments{
+        id: ID!,
+        text: String!,
+        postId: Posts!,
+        author: Users!,
+    }
+    type Posts {
+        id: ID!,
+        title: String!,
+        description: String!,
+        published: Boolean!,
+        author: Users!,
+        comments: [Comments!]!
+    }
+
+    type Mutation {
+        createUser(name: String!, email: String!, phone: String!): Users!
+        createPost(title: String!, description: String!, author: ID!, published: Boolean!): Posts!
+        createComment(text: String!, author: ID!, postId: ID!): Comments!
+    }
+    type Query {
+        post(query: String): [Posts!]!
+        user(query: String): [Users!]!
+        Comments(query: String): [Comments!]!
+    }
+
+`
 
 const resolvers = {
     Query: {
@@ -89,16 +94,41 @@ const resolvers = {
         }
     },
     Mutation: {
+        // create a new Users
         createUser: (parent, args) => {
             const { name, email, phone } = args;
             if (name && email && phone) {
-                const newPost = { id: v4(), name, email, phone };
-                posts.push(newPost);
-                return newPost
+                const isUser = users.some(user => user.email === email);
+                if (isUser) throw new Error(`User ${email} already exists`);
+                const newUser = { id: v4(), name, email, phone };
+                users.push(newUser);
+                return newUser
 
             } else {
                 throw new Error('All field are must ')
             }
+        },
+        // create a new Posts
+        createPost: (parent, args) => {
+            const { title, description, author, published } = args;
+            const isUser = users.some(user => user.id === author);
+            if (!isUser) throw new Error(`User not found with id ${author}`);
+            const newPost = { id: v4(), title, description, author, published };
+            posts.push(newPost);
+            return newPost;
+        },
+        // create a new Comment
+        createComment: (parent, args) => {
+            const { text, postId, author } = args;
+            const isUser = users.some(user => user.id === author);
+            const isPost = posts.some(post => post.id === postId && post.published === true);
+            console.log({ isUser, isPost })
+            if (!isUser || !isPost) {
+                throw new Error(`User and post must be specified`);
+            }
+            const newComment = { id: v4(), text: text, postId, author };
+            comments.push(newComment);
+            return newComment;
         }
     },
     Posts: {
