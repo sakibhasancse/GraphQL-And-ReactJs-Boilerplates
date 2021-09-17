@@ -1,6 +1,7 @@
 import { GraphQLServer } from 'graphql-yoga';
 import { v4 } from 'uuid';
 
+//Demo Data for app
 const users = [
     { id: 1, name: 'sakib', email: 'sakib@gain.com', phone: '123', posts: 12 },
     { id: 2, name: 'John', email: 'john@gain.com', phone: '123', posts: 13 },
@@ -49,10 +50,28 @@ const typeDefs = `
         comments: [Comments!]!
     }
 
+    input CreateUserInputType{
+        name: String!,
+         email: String!,
+          phone: String!
+    }
+
+    input CreatePostInputType{
+        title: String!,
+         description: String!,
+         author: ID!, published: Boolean!
+    }
+     input CreateCommentsInputType{
+        text: String!, author: ID!, postId: ID!
+    }
+
     type Mutation {
-        createUser(name: String!, email: String!, phone: String!): Users!
-        createPost(title: String!, description: String!, author: ID!, published: Boolean!): Posts!
-        createComment(text: String!, author: ID!, postId: ID!): Comments!
+        createUser(createUserInputType: CreateUserInputType): Users!
+        deleteUser(id:ID!):Users!
+        createPost(createPostInputType:CreatePostInputType): Posts!
+        deletePost(id:ID!, author: ID!):Posts!
+        createComment(createCommentsInputType:CreateCommentsInputType): Comments!
+        deleteComment(id:ID!, author: ID!, postId: ID!):Comments!
     }
     type Query {
         post(query: String): [Posts!]!
@@ -96,11 +115,11 @@ const resolvers = {
     Mutation: {
         // create a new Users
         createUser: (parent, args) => {
-            const { name, email, phone } = args;
+            const { name, email, phone } = args?.createUserInputType;
             if (name && email && phone) {
                 const isUser = users.some(user => user.email === email);
                 if (isUser) throw new Error(`User ${email} already exists`);
-                const newUser = { id: v4(), name, email, phone };
+                const newUser = { id: v4(), ...args.createUserInputType };
                 users.push(newUser);
                 return newUser
 
@@ -108,28 +127,62 @@ const resolvers = {
                 throw new Error('All field are must ')
             }
         },
+        //delete user from the database
+        deleteUser: (parent, args) => {
+            const isUser = users.findIndex(user => user.id === args?.id);
+            if (isUser === -1) throw new Error(`User not found with id ${args.id}`)
+            const deleteUser = users.splice(isUser, 1);
+            posts = posts.filter(post => {
+                const isMathPost = post.author.id === args.id;
+                if (isMathPost) {
+                    comments = comments.filter(comment => comment.postId !== post.id);
+                }
+                return !isMathPost
+            });
+            comments = comments.filter(comment => comment.postId !== args.id);
+            return deleteUser[0]
+        },
         // create a new Posts
         createPost: (parent, args) => {
-            const { title, description, author, published } = args;
             const isUser = users.some(user => user.id === author);
             if (!isUser) throw new Error(`User not found with id ${author}`);
-            const newPost = { id: v4(), title, description, author, published };
+            const newPost = { id: v4(), ...args?.createPostInputType };
             posts.push(newPost);
             return newPost;
         },
+        // delete a post
+        deletePost: (parent, args) => {
+            const isPost = posts.findIndex(post => post.id === args?.id);
+            const isUser = users.find(user => user.id === args?.author);
+            if (!isUser) throw new Error(`Author not found with id ${args?.author}`);
+            if (isPost === -1) throw new Error(`Post not found with id ${args.id}`)
+            posts.splice(isPost, 1);
+        },
         // create a new Comment
         createComment: (parent, args) => {
-            const { text, postId, author } = args;
+            const { postId, author } = args?.createCommentsInputType;
             const isUser = users.some(user => user.id === author);
             const isPost = posts.some(post => post.id === postId && post.published === true);
             console.log({ isUser, isPost })
             if (!isUser || !isPost) {
                 throw new Error(`User and post must be specified`);
             }
-            const newComment = { id: v4(), text: text, postId, author };
+            const newComment = { id: v4(), ...args?.createCommentsInputType };
             comments.push(newComment);
             return newComment;
-        }
+        },
+        //delete a comment
+        deleteComment: (parent, args) => {
+            const isPost = posts.find(post => post.id === args?.postId);
+            const isUser = users.find(user => user.id === args?.author);
+            const isComment = comments.findIndex(comment => comment.id === args?.id)
+
+            if (!isUser) throw new Error(`Author not found with author ${args?.author}`);
+            if (!isPost) throw new Error(`Post not found with post ${args.id}`);
+            if (!isComment) throw new Error(`Comment not found with comment ${args.id}`);
+
+            comments.splice(isComment, 1);
+        },
     },
     Posts: {
         //post  with author and comments
@@ -137,14 +190,12 @@ const resolvers = {
             return users.find((user) => {
                 return user.id === parent.author;
             })
-
         },
         comments(parent, args) {
             return comments.filter((comment) => {
                 return comment.postId === parent.id;
             })
         }
-
     },
     //comment with author and posts
     Comments: {
@@ -165,7 +216,6 @@ const resolvers = {
             return posts.filter((post) => {
                 return post.author === parent.id
             })
-
         },
         comments(parent, args) {
             return comments.filter((comment) => {
@@ -176,7 +226,9 @@ const resolvers = {
 }
 
 const server = new GraphQLServer({
-    typeDefs: typeDefs, resolvers: resolvers, formatErrors: (err) => {
+    typeDefs: typeDefs,
+    resolvers,
+    formatErrors: (err) => {
         if (err.message.startsWith('Database Error: ')) {
             return new Error('Internal server error');
         }
@@ -185,7 +237,8 @@ const server = new GraphQLServer({
         return err;
     }
 });
-const port = 3000;
+
+const port = process.env.PORT || 3000;
 server.start(({ port }), function () {
-    console.log('server listening on port 3000');
+    console.log(`Server listening on port ${port}`);
 });
