@@ -1,4 +1,5 @@
 import { GraphQLServer } from 'graphql-yoga';
+import { v4 } from 'uuid';
 
 const typeDefs = `
     type Users {
@@ -7,17 +8,29 @@ const typeDefs = `
         email: String!,
         phone: String!,
         post: [Posts!]!
+        comments: [Comments!]!
     }
-
+    type Comments{
+        id: ID!,
+        text: String!,
+        postId: Posts!,
+        author: Users!,
+    }
     type Posts {
         id: ID!,
         title: String!,
         description: String!,
-        author: Users!
+        author: Users!,
+        comments: [Comments!]!
+    }
+
+    type Mutation {
+        createUser(name: String!, email: String!, phone: String!): Users!
     }
     type Query {
         post(query: String): [Posts!]!
-        user(query: String): [Users!]! 
+        user(query: String): [Users!]!
+        Comments(query: String): [Comments!]!
     }
 
 `
@@ -35,9 +48,18 @@ const posts = [
     { id: 15, title: 'sa', description: 'sadasdas', author: 4 }
 ]
 
+const comments = [
+    { id: 12, author: 2, postId: 12, text: 'Hello, world commnt' },
+    { id: 13, author: 1, postId: 15, text: 'Hello, world commnt' },
+    { id: 14, author: 3, postId: 13, text: 'Hello, world commnt' },
+    { id: 11, author: 4, postId: 14, text: 'first, world commnt' },
+    { id: 16, author: 4, postId: 14, text: 'second, world commnt' },
+    { id: 15, author: 4, postId: 14, text: 'Hello, world commnt' }
+]
 
 const resolvers = {
     Query: {
+        //return users only
         user: (_, args) => {
             console.log(args)
             if (!args.query) {
@@ -47,6 +69,7 @@ const resolvers = {
             return users.filter(user => user.name.toLowerCase().includes(args.query.toLowerCase()))
 
         },
+        //return posts only
         post: (_, args) => {
             if (!args.query) {
                 return posts
@@ -57,28 +80,81 @@ const resolvers = {
                 return isTitleMatch || isBodyMatch;
             })
 
+        },
+        //return commnets only
+        Comments: (parent, args) => {
+            if (!args.query) {
+                return comments
+            }
+        }
+    },
+    Mutation: {
+        createUser: (parent, args) => {
+            const { name, email, phone } = args;
+            if (name && email && phone) {
+                const newPost = { id: v4(), name, email, phone };
+                posts.push(newPost);
+                return newPost
+
+            } else {
+                throw new Error('All field are must ')
+            }
         }
     },
     Posts: {
+        //post  with author and comments
         author(parent, args) {
             return users.find((user) => {
                 return user.id === parent.author;
             })
 
+        },
+        comments(parent, args) {
+            return comments.filter((comment) => {
+                return comment.postId === parent.id;
+            })
         }
 
     },
+    //comment with author and posts
+    Comments: {
+        author(parent, args) {
+            return users.find((user) => {
+                return user.id === parent.author;
+            })
+        },
+        postId(parent, args) {
+            return posts.find((post) => {
+                return post.id === parent.postId;
+            })
+        }
+    },
     Users: {
+        //user with posts and comments
         post(parent, args) {
             return posts.filter((post) => {
                 return post.author === parent.id
             })
 
+        },
+        comments(parent, args) {
+            return comments.filter((comment) => {
+                return comment.author === parent.id;
+            })
         }
     }
 }
 
-const server = new GraphQLServer({ typeDefs: typeDefs, resolvers: resolvers });
+const server = new GraphQLServer({
+    typeDefs: typeDefs, resolvers: resolvers, formatErrors: (err) => {
+        if (err.message.startsWith('Database Error: ')) {
+            return new Error('Internal server error');
+        }
+        // Otherwise return the original error. The error can also
+        // be manipulated in other ways, as long as it's returned.
+        return err;
+    }
+});
 const port = 3000;
 server.start(({ port }), function () {
     console.log('server listening on port 3000');
