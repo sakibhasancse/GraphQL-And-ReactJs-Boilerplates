@@ -1,11 +1,10 @@
 import { GraphQLServer } from 'graphql-yoga';
 import data from './data'
 import resolvers from './graphql/resolvers';
-// import typeDefs from
 
 
 const server = new GraphQLServer({
-    typeDefs: './graphql/schema/typeDefs.graphql',
+    typeDefs: `${process.env.PWD}/src/graphql/typeDefs.graphql`,
     resolvers,
     context: {
         data
@@ -17,7 +16,13 @@ const server = new GraphQLServer({
         // Otherwise return the original error. The error can also
         // be manipulated in other ways, as long as it's returned.
         return err;
+    },
+    playground: {
+    endpoint: `http://localhost:3000/graphql`,
+    settings: {
+      'editor.theme': 'light'
     }
+  }
 });
 
 const port = process.env.PORT || 3000;

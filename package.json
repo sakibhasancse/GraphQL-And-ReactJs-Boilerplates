@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node src/server.js",
-    "dev": "nodemon -ext graphql,js --exec npx babel-node src/server.js"
+    "start": "nodemon src/server.js  --ext graphql,js --exec npx babel-node "
   },
   "repository": {
     "type": "git",
