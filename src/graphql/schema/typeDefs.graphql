@@ -1,17 +1,3 @@
-type Mutation {
-  createUser(createUserInputType: CreateUserInputType): Users!
-  deleteUser(id: ID!): Users!
-  createPost(createPostInputType: CreatePostInputType): Posts!
-  deletePost(id: ID!, author: ID!): Posts!
-  createComment(createCommentsInputType: CreateCommentsInputType): Comments!
-  deleteComment(id: ID!, author: ID!, postId: ID!): Comments!
-}
-type Query {
-  post(query: String): [Posts!]!
-  user(query: String): [Users!]!
-  Comments(query: String): [Comments!]!
-}
-
 type Users {
   id: ID!
   name: String!
@@ -51,4 +37,23 @@ input CreateCommentsInputType {
   text: String!
   author: ID!
   postId: ID!
+}
+
+type Query {
+  post(query: String): [Posts!]!
+  user(query: String): [Users!]!
+  Comments(query: String): [Comments!]!
+}
+
+type Subscription {
+  comment(postId: ID!): Comments!
+}
+
+type Mutation {
+  createUser(createUserInputType: CreateUserInputType): Users!
+  deleteUser(id: ID!): Users!
+  createPost(createPostInputType: CreatePostInputType): Posts!
+  deletePost(id: ID!, author: ID!): Posts!
+  createComment(createCommentsInputType: CreateCommentsInputType): Comments!
+  deleteComment(id: ID!, author: ID!, postId: ID!): Comments!
 }

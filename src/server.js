@@ -1,25 +1,16 @@
-import { GraphQLServer } from 'graphql-yoga';
-import data from './data'
-import {Posts,
-    Users,
-    Query,
-    Mutation,
-    Comments
-} from './graphql/resolvers';
-    
+import { GraphQLServer, PubSub } from 'graphql-yoga';
+import data from './data';
+import resolvers from './graphql/resolvers';
+
+const pubsub = new PubSub();
 const server = new GraphQLServer({
     typeDefs: './src/graphql/schema/typeDefs.graphql',
-    resolvers: {
-        Posts,
-    Users,
-    Query,
-    Mutation,
-    Comments
-    },
+    resolvers,
     introspection: true,
     uploads: false,
     context: {
-        data
+        data,
+        pubsub
     },
     formatErrors: (err) => {
         if (err.message.startsWith('Database Error: ')) {

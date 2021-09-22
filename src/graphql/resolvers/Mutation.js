@@ -38,7 +38,7 @@ const Mutation = {
         return newPost;
     },
     // delete a post
-    deletePost: (parent, args, { data }) => {
+    deletePost: (parent, args, { data, pubsub }) => {
         const isPost = data.posts.findIndex(post => post.id === args?.id);
         const isUser = data.users.find(user => user.id === args?.author);
         if (!isUser) throw new Error(`Author not found with id ${args?.author}`);
@@ -46,16 +46,18 @@ const Mutation = {
         data.posts.splice(isPost, 1);
     },
     // create a new Comment
-    createComment: (parent, args, { data }) => {
+    createComment: (parent, args, { data, pubsub }) => {
         const { postId, author } = args?.createCommentsInputType;
-        const isUser = data.users.some(user => user.id === author);
-        const isPost = data.posts.some(post => post.id === postId && post.published === true);
-
+        const isUser = data.users.find(user => user.id === author);
+        const isPost = data.posts.find(post => post.id === postId && post.published === true);
+        console.log({ isUser, isPost })
         if (!isUser || !isPost) {
             throw new Error(`User and post must be specified`);
         }
         const newComment = { id: v4(), ...args?.createCommentsInputType };
         data.comments.push(newComment);
+
+        pubsub.publish(`comment ${postId}`, { comment: newComment })
         return newComment;
     },
     //delete a comment
