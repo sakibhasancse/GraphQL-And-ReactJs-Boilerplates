@@ -1,4 +1,4 @@
-export const Users = {
+const Users = {
     //user with posts and comments
     post(parent, args, { data }) {
         return data.posts.filter((post) => {
@@ -11,3 +11,4 @@ export const Users = {
         })
     }
 }
+export default Users

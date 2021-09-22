@@ -1,4 +1,4 @@
-export const Query = {
+const Query = {
     //return users only
     user: (_, args, { data }) => {
         if (!args.query) {
@@ -27,3 +27,5 @@ export const Query = {
         }
     }
 }
+
+export default Query

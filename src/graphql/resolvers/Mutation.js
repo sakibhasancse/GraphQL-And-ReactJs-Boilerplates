@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-export const Mutations = {
+const Mutation = {
     // create a new Users
     createUser: (parent, args, { data }) => {
         const { name, email, phone } = args?.createUserInputType;
@@ -71,3 +71,5 @@ export const Mutations = {
         data.comments.splice(isComment, 1);
     },
 }
+
+export default Mutation

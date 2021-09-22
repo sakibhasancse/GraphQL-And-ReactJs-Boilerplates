@@ -11,4 +11,4 @@ const Comments = {
         })
     }
 };
-export { Comments as default }
+export default Comments

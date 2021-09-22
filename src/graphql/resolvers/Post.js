@@ -1,4 +1,4 @@
-export const Posts = {
+const Posts = {
     //post  with author and comments
     author(parent, args, { data }) {
         return data.users.find((user) => {
@@ -11,3 +11,4 @@ export const Posts = {
         })
     }
 }
+export default Posts
