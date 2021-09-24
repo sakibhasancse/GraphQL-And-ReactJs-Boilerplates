@@ -47,6 +47,7 @@ type Query {
 
 type Subscription {
   comment(postId: ID!): Comments!
+  post(author: ID!): Posts!
 }
 
 type Mutation {

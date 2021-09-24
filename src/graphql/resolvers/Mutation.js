@@ -30,11 +30,13 @@ const Mutation = {
         return deleteUser[0]
     },
     // create a new Posts
-    createPost: (parent, args, { data }) => {
+    createPost: (parent, args, { data, pubsub }) => {
         const isUser = data.users.some(user => user.id === author);
         if (!isUser) throw new Error(`User not found with id ${author}`);
         const newPost = { id: v4(), ...args?.createPostInputType };
         data.posts.push(newPost);
+        console.log()
+        pubsub.publish(`userPost ${args.author}`, { post: newPost });
         return newPost;
     },
     // delete a post
