@@ -1,20 +1,20 @@
 const Subscription = {
     comment: {
-        subscribe: (parent, { postId }, { data, pubsub }) => {
-            const postData = data.posts.find(post => post.id === postId);
-            if (!postData) throw new Error(`No post with id ${postId}`);
+        subscribe: (parent, args, { data, pubsub }) => {
+            // const postData = data.posts.find(post => post.id === postId);
+            // if (!postData) throw new Error(`No post with id ${postId}`);
 
-            return pubsub.asyncIterator(`comment ${postId}`);
+            return pubsub.asyncIterator(`comment`);
         }
     },
     post: {
-        subscribe: (parent, { authorId }, { data, pubsub }) => {
-            const postData = data.posts.find(post => {
-                return post.author === authorId
-            });
-
-            if (!postData) throw new Error(`No post with id author id ${authorId}`);
-            return pubsub.asyncIterator(`authorId ${authorId}`);
+        subscribe: (parent, args, { data, pubsub }) => {
+            return pubsub.asyncIterator('post');
+        }
+    },
+    user: {
+        subscribe: (parent, args, { data, pubsub }) => {
+            return pubsub.asyncIterator('user');
         }
     }
 }

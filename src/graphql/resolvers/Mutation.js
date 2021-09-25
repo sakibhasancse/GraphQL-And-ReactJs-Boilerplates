@@ -1,13 +1,16 @@
 import { v4 } from 'uuid';
 const Mutation = {
     // create a new Users
-    createUser: (parent, args, { data }) => {
+    createUser: (parent, args, { data, pubsub }) => {
         const { name, email, phone } = args?.createUserInputType;
         if (name && email && phone) {
             const isUser = data.users.some(user => user.email === email);
             if (isUser) throw new Error(`User ${email} already exists`);
             const newUser = { id: v4(), ...args.createUserInputType };
             data.users.push(newUser);
+            //Authontic with access to publish user
+
+            pubsub.publish('user', { user: newUser })
             return newUser
 
         } else {
@@ -31,12 +34,13 @@ const Mutation = {
     },
     // create a new Posts
     createPost: (parent, args, { data, pubsub }) => {
-        const { author = '' } = args?.createPostInputType
+        const { author = '', published = false } = args?.createPostInputType
         const isUser = data.users.some(user => user.id === author);
         if (!isUser) throw new Error(`User not found with id ${author}`);
         const newPost = { id: v4(), ...args?.createPostInputType };
-
-        pubsub.publish(`authorId ${author}`, { post: newPost });
+        if (published) {
+            pubsub.publish(`post`, { post: { mutation: 'CREATE', data: newPost } });
+        }
         data.posts.push(newPost);
         return newPost;
     },
@@ -59,7 +63,7 @@ const Mutation = {
         const newComment = { id: v4(), ...args?.createCommentsInputType };
         data.comments.push(newComment);
 
-        pubsub.publish(`comment ${postId}`, { comment: newComment })
+        pubsub.publish(`comment`, { comment: { mutation: 'CREATE_COMMENT', data: newComment } })
         return newComment;
     },
     //delete a comment

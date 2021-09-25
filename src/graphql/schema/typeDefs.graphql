@@ -39,15 +39,30 @@ input CreateCommentsInputType {
   postId: ID!
 }
 
+enum TypeOfPost {
+  CREATE
+  DELETE
+}
+type PostSubcriptionPayload {
+  mutation: TypeOfPost!
+  data: Posts!
+}
+
+type CommentSubcriptionPayload {
+  mutation: String!
+  data: Comments!
+}
+
+type Subscription {
+  comment: CommentSubcriptionPayload!
+  post: PostSubcriptionPayload!
+  user: Users!
+}
+
 type Query {
   post(query: String): [Posts!]!
   user(query: String): [Users!]!
   Comments(query: String): [Comments!]!
-}
-
-type Subscription {
-  comment(postId: ID!): Comments!
-  post(authorId: ID!): Posts!
 }
 
 type Mutation {
