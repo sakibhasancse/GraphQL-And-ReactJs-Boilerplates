@@ -31,12 +31,13 @@ const Mutation = {
     },
     // create a new Posts
     createPost: (parent, args, { data, pubsub }) => {
+        const { author = '' } = args?.createPostInputType
         const isUser = data.users.some(user => user.id === author);
         if (!isUser) throw new Error(`User not found with id ${author}`);
         const newPost = { id: v4(), ...args?.createPostInputType };
+
+        pubsub.publish(`authorId ${author}`, { post: newPost });
         data.posts.push(newPost);
-        console.log()
-        pubsub.publish(`userPost ${args.author}`, { post: newPost });
         return newPost;
     },
     // delete a post
@@ -52,7 +53,6 @@ const Mutation = {
         const { postId, author } = args?.createCommentsInputType;
         const isUser = data.users.find(user => user.id === author);
         const isPost = data.posts.find(post => post.id === postId && post.published === true);
-        console.log({ isUser, isPost })
         if (!isUser || !isPost) {
             throw new Error(`User and post must be specified`);
         }

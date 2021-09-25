@@ -8,15 +8,13 @@ const Subscription = {
         }
     },
     post: {
-        subscribe: (parent, { author }, { data, pubsub }) => {
-            console.log(author)
+        subscribe: (parent, { authorId }, { data, pubsub }) => {
             const postData = data.posts.find(post => {
-                console.log(post.author);
-                return post.author === author
+                return post.author === authorId
             });
 
-            if (!postData) throw new Error(`No post with id author id ${author}`);
-            return pubsub.asyncIterator(`userPost ${author}`);
+            if (!postData) throw new Error(`No post with id author id ${authorId}`);
+            return pubsub.asyncIterator(`authorId ${authorId}`);
         }
     }
 }
