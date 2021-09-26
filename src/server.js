@@ -21,11 +21,11 @@ const server = new GraphQLServer({
         return err;
     },
     playground: {
-    endpoint: `http://localhost:3000/graphql`,
-    settings: {
-      'editor.theme': 'light'
+        endpoint: `http://localhost:3000/graphql`,
+        settings: {
+            'editor.theme': 'light'
+        }
     }
-  }
 });
 
 const port = process.env.PORT || 3000;
