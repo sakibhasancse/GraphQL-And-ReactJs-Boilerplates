@@ -21,7 +21,6 @@ const server = new GraphQLServer({
         return err;
     },
     playground: {
-        endpoint: `http://localhost:3000/graphql`,
         settings: {
             'editor.theme': 'light'
         }
