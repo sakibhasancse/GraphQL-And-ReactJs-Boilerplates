@@ -1,9 +1,10 @@
-import { GraphQLServer, PubSub } from 'graphql-yoga';
-import data from './data';
+
+import { ApolloServer } from 'apollo-server-express';
+import db from './data';
 import resolvers from './graphql/resolvers';
 
 const pubsub = new PubSub();
-const server = new GraphQLServer({
+const server = new ApolloServer({
     typeDefs: './src/graphql/schema/typeDefs.graphql',
     resolvers,
     introspection: true,

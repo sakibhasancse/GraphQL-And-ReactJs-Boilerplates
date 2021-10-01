@@ -1,5 +1,5 @@
 {
-  "name": "todoapp",
+  "name": "Sakib App",
   "version": "1.0.1",
   "description": "test app",
   "main": "index.js",
@@ -26,7 +26,8 @@
     "@babel/node": "^7.15.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.15.6",
     "@babel/preset-env": "^7.15.6",
-    "graphql-yoga": "^1.18.3",
+    "apollo-server-express": "^3.3.0",
+    "graphql": "^15.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.8",
     "nodemon": "^2.0.12",
