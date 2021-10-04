@@ -63,6 +63,7 @@ const StartUpServer = (callback) => {
         }
     }
     GraphQlServerConfig(handleWork);
+    console.log({ work })
 }
 
 StartUpServer();

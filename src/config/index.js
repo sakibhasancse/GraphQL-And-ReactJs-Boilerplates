@@ -15,7 +15,7 @@ const config = {
         db: process.env.DB_NAME || 'graphql_Ecommers',
         reconnectedTimeout: process.env.DB_RECONNECT_TIME || 5000
     },
-    public_key_file: process.env.JWT_PUB_KEY_FILE || path.join(__dirname, '../sample_keys/public_key.pem'),
+    public_key_file: process.env.JWT_PUB_KEY_FILE || path.join(__dirname, './sample_keys/public_key.pem'),
     public_key_b64: process.env.JWT_PUB_KEY_B64,
     logging_level: process.env.LOGGING_LEVEL || (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
     db_logging_log: process.env.DB_DEBUG_LOG || process.env.NODE_ENV !== 'production'

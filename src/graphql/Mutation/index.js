@@ -1,3 +1,3 @@
-import user from './user';
+import userMutation from './user';
 
-export default { getUser: user.getUser }
+export default { createUser: userMutation.createUser }

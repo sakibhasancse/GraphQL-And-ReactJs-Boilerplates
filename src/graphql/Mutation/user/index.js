@@ -1,4 +1,4 @@
-import { getUser } from './user-query';
+import { createUser } from './create-user-mutation';
 
 
-export default { getUser }
+export default { createUser }
