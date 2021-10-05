@@ -7,3 +7,5 @@ const userInputType = new GraphQLInputObjectType({
         name: { type: GraphQLString }
     }
 })
+
+export default userInputType
