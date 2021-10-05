@@ -1,0 +1,13 @@
+type Users {
+  id: ID!
+  name: String!
+  email: String!
+  phone: String!
+  post: [Posts!]!
+  comments: [Comments!]!
+}
+input CreateUserInputType {
+  name: String!
+  email: String!
+  phone: String!
+}

@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
  * Mongoose Connection
 **/
 
-mongoose.set('useCreateIndex', true);
+// mongoose.set('useCreateIndex', true);
 const Connection = mongoose.connect(config.mongo.url + '/' + config.mongo.db, {
     autoReconnect: true,
     useNewUrlParser: true,

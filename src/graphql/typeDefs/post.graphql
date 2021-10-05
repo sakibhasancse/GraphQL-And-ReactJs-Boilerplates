@@ -1,0 +1,14 @@
+type Posts {
+  id: ID!
+  title: String!
+  description: String!
+  published: Boolean!
+  author: Users!
+  comments: [Comments!]!
+}
+input CreatePostInputType {
+  title: String!
+  description: String!
+  author: ID!
+  published: Boolean!
+}

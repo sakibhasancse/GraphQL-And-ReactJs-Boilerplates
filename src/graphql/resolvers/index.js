@@ -1,11 +1,18 @@
+import { commentMutations, commentQuerys } from './comments';
+import { postMutations, postQuerys } from './posts';
+import { userMutations, userQuerys } from './users';
 
+const resolvers = {
+    Query: {
+        ...commentQuerys,
+        ...postQuerys,
+        ...userQuerys
+    },
+    Mutation: {
+        ...commentMutations,
+        ...postMutations,
+        ...userMutations
+    }
+}
 
-
-import Posts from './Post';
-import Users from './User';
-import Query from './Query';
-import Mutation from './Mutation';
-import Comments from './Comment';
-import Subscription from './Subscription'
-
-export default { Posts, Users, Query, Mutation, Comments, Subscription }
+export default resolvers;

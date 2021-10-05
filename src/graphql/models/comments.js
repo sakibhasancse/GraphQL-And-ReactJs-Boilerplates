@@ -12,4 +12,4 @@ const postSchema = new mongoose.Schema({
     }
 }, { titmeStamps: true })
 
-export default mongoose.model('Post', postSchema);
+export default mongoose.model('Commets', postSchema);

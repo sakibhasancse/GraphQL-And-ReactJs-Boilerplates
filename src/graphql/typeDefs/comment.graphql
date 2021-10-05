@@ -1,0 +1,11 @@
+type Comments {
+  id: ID!
+  text: String!
+  postId: Posts!
+  author: Users!
+}
+input CreateCommentsInputType {
+  text: String!
+  author: ID!
+  postId: ID!
+}

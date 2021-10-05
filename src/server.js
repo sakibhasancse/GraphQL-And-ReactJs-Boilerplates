@@ -1,5 +1,5 @@
 import express from 'express';
-import graphqlHTTP from 'express-graphql';
+import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import cookiesParser from 'cookies-parser';
 
@@ -7,63 +7,24 @@ import config from './config';
 import Schema from './schema';
 import Connection from './config/dbConnection';
 
+const server = new ApolloServer({
+    Schema
+})
+const app = express();
+server.applyMiddleware({ app })
 
-let GraphQlServer;
+app.use(cors({
+    origin: config.cors.origin,
+    credentials: true
+}))
 
-const GraphQlServerConfig = (callback) => {
+app.use(cookiesParser());
 
-    Connection()
-        .then(function (connection) {
-
-        }).catch(function (error) {
-
-        });
-
-    const app = express();
-
-    app.use(cors({
-        origin: config.cors.origin,
-        credentials: true
-    }))
-
-    app.use(cookiesParser());
-    app.use('/healthcheck', require('express-healthcheck')());
-
-    const graphqlHttpOptions = {
-        graphql: true,
-        pretty: true,
-        schema: Schema
-    }
-    const PORT = parseInt(config.http_port);
-
-    app.use('/graphql', graphqlHTTP((request, response, graphQLParams) => ({ ...graphqlHttpOptions, context: request.gqlviewer })))
-
-
-    GraphQlServer = app.listen(PORT, function () {
-        console.log(`Server listening on http://localhost:${PORT}`);
-        if (callback) {
-            callback()
-        }
+const PORT = parseInt(config.http_port);
+app.listen(PORT, () => {
+    Connection().then(() => {
+        console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
+    }).catch(() => {
+        console.log(`🚀 Server ready to faild`)
     });
-}
-
-
-const StartUpServer = (callback) => {
-    //Shut down the server
-    if (GraphQlServer) {
-        GraphQlServer.close()
-    }
-
-    const work = 0;
-
-    const handleWork = () => {
-        work++;
-        if (work === 1 && callback) {
-            callback();
-        }
-    }
-    GraphQlServerConfig(handleWork);
-    console.log({ work })
-}
-
-StartUpServer();
+})
