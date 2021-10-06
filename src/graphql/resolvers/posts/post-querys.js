@@ -1,8 +1,9 @@
 
-import { Post } from '../../models'
-const userQuerys = {
-    getUsers: async (_, args) => {
-        return User.find();
+import { Posts } from '../../models'
+const postQuerys = {
+    getPosts: async (_, args) => {
+
+        return await Posts.find({});
     }
 }
-export default userQuerys
+export default postQuerys

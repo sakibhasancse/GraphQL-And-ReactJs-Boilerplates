@@ -1,36 +1,38 @@
-import { v4 } from 'uuid';
+import { Users, Posts, Comments } from '../../models'
 const userMutations = {
     // create a new Users
-    createUser: (parent, args, { data, pubsub }) => {
+    createUser: (parent, args) => {
         const { name, email, phone } = args?.createUserInputType;
         if (name && email && phone) {
-            const isUser = data.users.some(user => user.email === email);
+            const isUser = User.findOne({ email })
             if (isUser) throw new Error(`User ${email} already exists`);
-            const newUser = { id: v4(), ...args.createUserInputType };
-            data.users.push(newUser);
-            //Authontic with access to publish user
+            const newUser = new User(
+                args.createUserInputType
+            );
+            newUser.save(() => {
 
-            pubsub.publish('user', { user: newUser })
-            return newUser
+            }).then(() => {
+                return newUser
+            }).catch(() => {
+                return {}
+            });
 
         } else {
             throw new Error('All field are must ')
         }
     },
     //delete user from the database
-    deleteUser: (parent, args, { data }) => {
-        const isUser = data.users.findIndex(user => user.id === args?.id);
-        if (isUser === -1) throw new Error(`User not found with id ${args.id}`)
-        const deleteUser = data.users.splice(isUser, 1);
-        posts = data.posts.filter(post => {
-            const isMathPost = post.author.id === args.id;
-            if (isMathPost) {
-                data.comments = data.comments.filter(comment => comment.postId !== post.id);
-            }
-            return !isMathPost
-        });
-        data.comments = data.comments.filter(comment => comment.postId !== args.id);
-        return deleteUser[0]
+    deleteUser: (parent, args) => {
+        // const { id } = args
+        // const isUser = Users.findOne({ _id: id });
+        // if (isUser) throw new Error(`User not found with id ${id}`);
+
+        // const isPost = Posts.findOne({ "author": id });
+        // if (isPost) {
+        //     const isComment = Comments.findOne({ "postId": isPost._id });
+        // }
+
+        return {}
     }
 
 }
