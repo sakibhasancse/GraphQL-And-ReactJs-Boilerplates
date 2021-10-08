@@ -4,14 +4,17 @@ const postSchema = new mongoose.Schema({
     title: {
         type: String
     },
-    decription: {
+    slug: {
+        type: String
+    },
+    description: {
         type: String
     },
     published: {
-        type: String
+        type: Boolean
     },
     author: {
-        type: Number
+        type: String
     }
 }, { titmeStamps: true })
 

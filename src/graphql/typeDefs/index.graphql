@@ -2,21 +2,21 @@ enum TypeOfPost {
   CREATE
   DELETE
 }
-# type PostSubcriptionPayload {
-#   mutation: TypeOfPost!
-#   data: Posts!
-# }
+type PostSubcriptionPayload {
+  mutation: TypeOfPost!
+  data: Posts!
+}
 
-# type CommentSubcriptionPayload {
-#   mutation: String!
-#   data: Comments!
-# }
+type CommentSubcriptionPayload {
+  mutation: String!
+  data: Comments!
+}
 
-# type Subscription {
-#   comment: CommentSubcriptionPayload!
-#   post: PostSubcriptionPayload!
-#   user: Users!
-# }
+type Subscription {
+  comment: CommentSubcriptionPayload!
+  post: PostSubcriptionPayload!
+  user: Users!
+}
 
 type Query {
   getPosts: [Posts!]!
@@ -25,7 +25,8 @@ type Query {
 }
 
 type Mutation {
-  createUser(createUserInputType: CreateUserInputType): Users!
+  createUser(createUserInputType: CreateUserInputType): AuthPayload!
+  loginUser(loginUserInputType: LoginUserInputType): AuthPayload!
   deleteUser(id: ID!): Users!
   createPost(createPostInputType: CreatePostInputType): Posts!
   deletePost(id: ID!, author: ID!): Posts!

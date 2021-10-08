@@ -39,6 +39,6 @@ import './src/config/dbConnection';
 
     httpServer.listen(PORT, () => {
         console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
-        console.log(`😷 Health checks available at ${config.HEALTH_ENDPOINT}`);
+        // console.log(`😷 Health checks available at ${config.HEALTH_ENDPOINT}`);
     })
 })();

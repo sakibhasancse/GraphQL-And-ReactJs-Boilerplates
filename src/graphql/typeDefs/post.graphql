@@ -2,6 +2,7 @@ type Posts {
   id: ID!
   title: String!
   description: String!
+  slug: String!
   published: Boolean!
   author: Users!
   comments: [Comments!]!

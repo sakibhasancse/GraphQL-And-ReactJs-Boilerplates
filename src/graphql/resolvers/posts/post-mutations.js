@@ -1,16 +1,8 @@
-import { v4 } from 'uuid';
+import { createNewPost} from './services'
 const postMutation = {
     // create a new Posts
     createPost: (parent, args) => {
-        // const { author = '', published = false } = args?.createPostInputType
-        // const isUser = data.users.some(user => user.id === author);
-        // if (!isUser) throw new Error(`User not found with id ${author}`);
-        // const newPost = { id: v4(), ...args?.createPostInputType };
-        // if (published) {
-        //     pubsub.publish(`post`, { post: { mutation: 'CREATE', data: newPost } });
-        // }
-        // data.posts.push(newPost);
-        return {};
+        return createNewPost(args?.createPostInputType)
     },
     // delete a post
     deletePost: (parent, args) => {

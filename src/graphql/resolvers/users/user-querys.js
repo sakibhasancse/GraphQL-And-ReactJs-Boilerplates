@@ -1,8 +1,8 @@
 
-import { User } from '../../models'
+import { Users } from '../../models'
 const userQuerys = {
     getUsers: async (_, args) => {
-        return User.find({});
+        return Users.find({});
     }
 }
 export default userQuerys

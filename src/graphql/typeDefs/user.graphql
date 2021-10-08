@@ -1,8 +1,14 @@
+type AuthPayload {
+  token: String!
+  user: Users!
+}
+
 type Users {
   id: ID!
   name: String!
   email: String!
   phone: String!
+  role: String!
   post: [Posts!]!
   comments: [Comments!]!
 }
@@ -10,5 +16,10 @@ input CreateUserInputType {
   name: String!
   email: String!
   phone: String!
+  password: String!
+}
+
+input LoginUserInputType {
+  email: String!
   password: String!
 }
