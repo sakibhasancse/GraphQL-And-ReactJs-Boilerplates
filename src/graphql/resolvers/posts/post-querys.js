@@ -1,9 +1,6 @@
 
-import { Posts } from '../../models'
+import { getPosts } from './services'
 const postQuerys = {
-    getPosts: async (_, args) => {
-
-        return await Posts.find({});
-    }
+    getPosts: async (_, args) => getPosts(args)
 }
 export default postQuerys

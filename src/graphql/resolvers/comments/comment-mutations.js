@@ -1,19 +1,9 @@
+
 import { v4 } from 'uuid';
+import { createComment } from './commnet-services';
 const commentsMutation = {
     // create a new Comment
-    createComment: (parent, args) => {
-        // const { postId, author } = args?.createCommentsInputType;
-        // const isUser = data.users.find(user => user.id === author);
-        // const isPost = data.posts.find(post => post.id === postId && post.published === true);
-        // if (!isUser || !isPost) {
-        //     throw new Error(`User and post must be specified`);
-        // }
-        // const newComment = { id: v4(), ...args?.createCommentsInputType };
-        // data.comments.push(newComment);
-
-        // pubsub.publish(`comment`, { comment: { mutation: 'CREATE_COMMENT', data: newComment } })
-        return {};
-    },
+    createComment: (parent, args) => createComment(args?.createCommentsInputType),
     //delete a comment
     deleteComment: (parent, args) => {
         // const isPost = data.posts.find(post => post.id === args?.postId);

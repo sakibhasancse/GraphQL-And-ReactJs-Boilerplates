@@ -1,11 +1,11 @@
 type Comments {
   id: ID!
   text: String!
-  postId: Posts!
+  posts: Posts!
   author: Users!
 }
 input CreateCommentsInputType {
   text: String!
   author: ID!
-  postId: ID!
+  posts: ID!
 }

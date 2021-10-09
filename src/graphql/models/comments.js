@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
-const postSchema = new mongoose.Schema({
+const commentSchema = new mongoose.Schema({
     text: {
         type: String
     },
-    postId: {
+    posts: {
         type: String
     },
     author: {
@@ -12,4 +12,4 @@ const postSchema = new mongoose.Schema({
     }
 }, { titmeStamps: true })
 
-export default mongoose.model('Commets', postSchema);
+export default mongoose.model('Comments', commentSchema);

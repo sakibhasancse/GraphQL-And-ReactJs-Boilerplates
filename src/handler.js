@@ -1,7 +1,7 @@
 
 import { ApolloServer } from 'apollo-server-express';
 import schema from './schema';
-import context from './context';
+import Authorization from './utils/Auth';
 import {
     ApolloServerPluginLandingPageGraphQLPlayground,
     ApolloServerPluginLandingPageDisabled
@@ -16,6 +16,7 @@ const server = new ApolloServer({
     introspection: true,
     tracing: true,
     path: '/',
+    context: async ({ req }) => Authorization(req)
 })
 
 
