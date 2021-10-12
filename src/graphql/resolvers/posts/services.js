@@ -2,17 +2,17 @@ import { Posts, Users, Comments } from '../../models';
 import slugify from 'slugify';
 import { map } from 'lodash'
 
-const createNewPost = async (args) => {
-    const { author = '', title = '', description = '', published } = args;
-
-    const isUser = await Users.findOne({ _id: author });
-    if (!isUser) throw new Error(`User not found with id ${author}`);
+const createNewPost = async (args, userId) => {
+    console.log('Creating new post')
+    const { title = '', description = '', published } = args;
+    const isUser = await Users.findOne({ _id: userId });
+    if (!isUser) throw new Error(`User not found with id ${userId}`);
 
     const slug = slugify(title)
     const isPost = await Posts.findOne({ slug });
 
     if (isPost) throw new Error(`Post already exists with title ${slug}`);
-    const newPost = new Posts({ author, published, title, slug, description });
+    const newPost = new Posts({ author: userId, published, title, slug, description });
 
     // if (published) {
     // pubsub.publish(`post`, { post: { mutation: 'CREATE', data: newPost } });

@@ -1,8 +1,10 @@
-import { createNewPost} from './services'
+import Authentication from '../../../utils/Auth'
+import { createNewPost } from './services'
 const postMutation = {
     // create a new Posts
-    createPost: (parent, args) => {
-        return createNewPost(args?.createPostInputType)
+    createPost: (parent, args, context) => {
+        const { userId } = Authentication(context);
+        return createNewPost(args?.createPostInputType, userId)
     },
     // delete a post
     deletePost: (parent, args) => {
