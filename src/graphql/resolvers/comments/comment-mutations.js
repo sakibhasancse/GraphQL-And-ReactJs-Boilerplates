@@ -3,7 +3,9 @@ import { v4 } from 'uuid';
 import { createComment } from './commnet-services';
 const commentsMutation = {
     // create a new Comment
-    createComment: (parent, args) => createComment(args?.createCommentsInputType),
+    createComment: (parent, args, context) => {
+        return createComment(parent, args?.createCommentsInputType, context)
+    },
     //delete a comment
     deleteComment: (parent, args) => {
         // const isPost = data.posts.find(post => post.id === args?.postId);

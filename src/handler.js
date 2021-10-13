@@ -14,7 +14,9 @@ const server = new ApolloServer({
     playground: true,
     introspection: true,
     tracing: true,
-    path: '/'
+    path: '/',
+    context: (context) => context,
+    formatResponse: (response) => response
 
 })
 

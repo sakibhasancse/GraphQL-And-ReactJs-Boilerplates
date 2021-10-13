@@ -1,15 +1,20 @@
 import { AuthenticationError, UserInputError } from 'apollo-server-errors';
 import { Comments, Users, Posts } from '../../models';
+import Authentication from '../../../utils/Auth';
 
-const createComment = async (args) => {
-    const { posts, author } = args;
+const createComment = async (_, args, context) => {
 
-    const isUser = await Users.findOne({ _id: author });
+    const { userId } = Authentication(context);
+    if (!userId) throw new AuthenticationError('user not authorize')
+
+    const { posts } = args;
+
+    const isUser = await Users.findOne({ _id: userId });
     if (!isUser) throw new AuthenticationError('Please login first');
 
     const isPost = await Posts.findOne({ _id: posts })
     if (!isPost) throw new UserInputError('Post not found');
-    if (isPost && isUser) {
+    if (isPost && isUser && userId) {
         const comment = new Comments(args)
         return comment.save()
     }

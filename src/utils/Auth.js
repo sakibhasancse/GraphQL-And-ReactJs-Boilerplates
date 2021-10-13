@@ -1,15 +1,14 @@
 import { AuthenticationError } from "apollo-server-errors";
 import jwt from 'jsonwebtoken';
-import { jwt_secret } from '../config'
+import config from '../config'
 
 const Authentication = (context) => {
     const { req } = context;
-    console.log(req)
-    const headers = req.headers;
+    const headers = req && req.headers || '';
 
-    if (headers.authorization) {
-        const token = headers.authorization.split('Bearer ')[0];
-        const user = jwt.verify(token, jwt_secret);
+    if (headers && headers.authorization) {
+        const token = headers.authorization.split('Bearer ')[1];
+        const user = jwt.verify(token, config.jwt_secret);
         if (user) return user
         else throw new AuthenticationError('Invalid/Expired token please log in');
     } else {
