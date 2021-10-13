@@ -1,6 +1,6 @@
 import config from './index'
 import mongoose from 'mongoose'
-
+import { logger } from '../utils/logger'
 /**
  * Mongoose Connection
 **/
@@ -17,8 +17,12 @@ if (config.db_debug_log) {
     mongoose.set('debug', true);
 }
 connection
-    .then(db => db)
+    .then(db => {
+        logger.info('Connecting to database successfully')
+        return db
+    })
     .catch(err => {
+        logger.debug('Error connecting to database')
         console.log(err);
     });
 
