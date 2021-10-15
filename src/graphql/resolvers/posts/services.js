@@ -20,6 +20,16 @@ const createNewPost = async (args, userId) => {
     return newPost.save();
 }
 
+const deletePost = async (parent, args, context) => {
+
+    const isPost = Posts.find({ _id: args?.postId });
+    if (isPost) throw new Error(`Post not found with id ${args.id}`)
+    const isUser = Users.find({ _id: args?.author });
+    if (!isUser) throw new Error(`Author not found with id ${args?.author}`);
+
+    const deletePost = Posts.deleteOne({ _id: isPost._id })
+    return deletePost;
+}
 //all posts are published
 const getPosts = async (args) => {
     return Posts.find({ published: true }).sort({ createdAt: -1 });
@@ -38,4 +48,4 @@ const getAuthor = async (parent, args) => {
 const getComment = async (parent, args) => {
     return Comments.find({ postId: parent.id })
 }
-export { createNewPost, getPosts, PostsQuery }
+export { createNewPost, getPosts, PostsQuery, deletePost }

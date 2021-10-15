@@ -7,7 +7,7 @@ import {
     ApolloServerPluginLandingPageDisabled
 } from 'apollo-server-core';
 
-logger.info(' apollo server is enabled');
+logger.info('apollo server is enabled');
 
 const server = new ApolloServer({
     plugins: [

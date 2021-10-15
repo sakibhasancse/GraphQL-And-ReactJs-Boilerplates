@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 import server from './src/handler';
 import { createServer } from 'http';
 import './src/config/dbConnection';
-
+import { logger } from './src/utils/logger';
 
 (async function () {
 
@@ -38,6 +38,7 @@ import './src/config/dbConnection';
     const PORT = parseInt(config.http_port);
 
     httpServer.listen(PORT, () => {
+        logger.info('Server ready')
         console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
         // console.log(`😷 Health checks available at ${config.HEALTH_ENDPOINT}`);
     })
