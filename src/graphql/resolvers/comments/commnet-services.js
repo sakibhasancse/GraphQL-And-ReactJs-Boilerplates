@@ -20,6 +20,10 @@ const createComment = async (_, args, context) => {
     }
 }
 
+
+const deleteComment = async () => {
+
+}
 const getPostsComments = async (_, args) => {
     return Comment.find({});
 }
@@ -37,4 +41,5 @@ const getAuthor = async (parent, args) => {
     return Users.findOne({ _id: parent.author })
 }
 
-export { createComment, getPostsComments, CommentsQuery }
+
+export { createComment, getPostsComments, CommentsQuery, deleteComment }
