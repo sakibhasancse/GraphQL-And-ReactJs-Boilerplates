@@ -31,4 +31,9 @@ const loginUser = async (args) => {
     return { token: token, user: isUser }
 }
 
+const updateUser = async (parent, args, context) => {
+
+
+}
+
 export { addNewUser, loginUser }
