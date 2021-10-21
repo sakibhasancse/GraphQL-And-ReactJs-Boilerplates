@@ -32,8 +32,11 @@ const loginUser = async (args) => {
 }
 
 const updateUser = async (parent, args, context) => {
+    const { userId } = isAuthorized(context);
 
+    const isUpdate = Users.update({ _id: userId }, args);
 
+    return isUpdate;
 }
 
-export { addNewUser, loginUser }
+export { addNewUser, loginUser, updateUser }
