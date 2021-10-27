@@ -23,3 +23,9 @@ input LoginUserInputType {
   email: String!
   password: String!
 }
+
+input UpdateUserInputType {
+  name: String!
+  email: String!
+  phone: String!
+}
