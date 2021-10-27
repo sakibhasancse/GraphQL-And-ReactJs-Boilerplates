@@ -1,15 +1,8 @@
 FROM node:alpine
 
 WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
 
-RUN apk add yarn
-
-COPY package.json yarn.lock ./
-
-RUN yarn install --frozen-lockfile
-
-COPY ./ ./
-
-EXPOSE 8000
-
-CMD ["yarn", "start"]
+CMD ["npm", "start"]

@@ -1,11 +1,14 @@
 {
-  "name": "Sakib App",
+  "name": "sakib_app",
   "version": "1.0.1",
   "description": "blog app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --ext graphql,js --exec npx babel-node server.js "
+    "start": "nodemon --ext graphql,js --exec npx babel-node server.js",
+    "docker:up": "docker-compose up -d --build",
+    "docker:down": "docker-compose down",
+    "test:docker": "docker-compose up -d --build && docker-compose down"
   },
   "repository": {
     "type": "git",
@@ -31,6 +34,7 @@
     "apollo-server-express": "^3.3.0",
     "app-root-path": "^3.0.0",
     "bcryptjs": "^2.4.3",
+    "chai": "^4.3.4",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

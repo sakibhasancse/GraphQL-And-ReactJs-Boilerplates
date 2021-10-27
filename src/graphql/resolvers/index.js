@@ -2,7 +2,8 @@ import { commentMutations, commentQuerys } from './comments';
 import { postMutations, postQuerys } from './posts';
 import { userMutations, userQuerys } from './users';
 import { PostsQuery } from './posts/services';
-import { CommentsQuery } from './comments/commnet-services'
+import { CommentsQuery } from './comments/commnet-services';
+// import { UsersQuery } from './users/services';
 
 
 const resolvers = {
@@ -17,7 +18,7 @@ const resolvers = {
         ...userMutations
     },
     Posts: PostsQuery,
-    Comments: CommentsQuery
+    Comments: CommentsQuery,
     // Users: UsersQuery,
 }
 
