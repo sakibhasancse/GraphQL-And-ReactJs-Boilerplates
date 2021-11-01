@@ -1,9 +1,12 @@
 import React from 'react'
+import { Navbar } from './navbar';
+import Post from './post';
 
 export const Posts = () => {
     return (
         <div>
-            Hello World
+            <Navbar />
+            <Post />
         </div>
     )
 }
