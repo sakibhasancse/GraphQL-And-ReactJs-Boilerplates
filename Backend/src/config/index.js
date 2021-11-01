@@ -12,7 +12,7 @@ const config = {
         : [/localhost/],
     mongo: {
         url: process.env.DB_URL || 'mongodb://localhost:27017',
-        db: process.env.DB_NAME || 'graphql_Ecommers',
+        db: process.env.DB_NAME || 'graphql_blog',
         reconnectedTimeout: process.env.DB_RECONNECT_TIME || 5000
     },
     public_key_file: process.env.JWT_PUB_KEY_FILE || path.join(__dirname, './sample_keys/public_key.pem'),
