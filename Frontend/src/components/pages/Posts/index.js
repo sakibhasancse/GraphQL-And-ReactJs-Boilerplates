@@ -1,4 +1,5 @@
 import React from 'react'
+import { Footer } from './Footer';
 import { Header } from './Header';
 import { Navbar } from './navbar';
 import Post from './post';
@@ -15,6 +16,7 @@ export const Posts = () => {
                 <Post />
                 <SidNavBar />
             </div>
+            <Footer />
         </div>
     )
 }
