@@ -16,35 +16,35 @@ const CREATE_BOOK_MUTATION = gql`
 `;
 
 describe('tests', () => {
-    let server: ApolloServer;
-    const typename = 'Book';
+  let server: ApolloServer;
+  const typename = 'Book';
 
-    beforeAll(() => {
-        server = new ApolloServer(apolloServerConfig);
+  beforeAll(() => {
+    server = new ApolloServer(apolloServerConfig);
+  });
+
+  afterAll(async () => {
+    prismaContext.prisma.book.deleteMany();
+    await prismaContext.prisma.$disconnect();
+  });
+
+  it('should pass', async () => {
+    const mockBook: CreateBookInput = {
+      title: 'dumb title',
+      author: 'smart author',
+    };
+
+    const result = await server.executeOperation({
+      query: CREATE_BOOK_MUTATION,
+      variables: { input: mockBook },
     });
 
-    afterAll(async () => {
-        prismaContext.prisma.book.deleteMany();
-        await prismaContext.prisma.$disconnect();
-    });
-
-    it('should pass', async () => {
-        const mockBook: CreateBookInput = {
-            title: 'dumb title',
-            author: 'smart author',
-        };
-
-        const result = await server.executeOperation({
-            query: CREATE_BOOK_MUTATION,
-            variables: { input: mockBook },
-        });
-
-        expect(result.data).toBeDefined();
-        expect(result?.data?.createBook).toBeDefined();
-        const createdBook = result?.data?.createBook;
-        expect(createdBook.__typename).toBe(typename);
-        expect(createdBook.bookId).toBeDefined();
-        expect(createdBook.title).toBe(mockBook.title);
-        expect(createdBook.author).toBe(mockBook.author);
-    });
+    expect(result.data).toBeDefined();
+    expect(result?.data?.createBook).toBeDefined();
+    const createdBook = result?.data?.createBook;
+    expect(createdBook.__typename).toBe(typename);
+    expect(createdBook.bookId).toBeDefined();
+    expect(createdBook.title).toBe(mockBook.title);
+    expect(createdBook.author).toBe(mockBook.author);
+  });
 });
