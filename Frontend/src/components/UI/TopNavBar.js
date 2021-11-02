@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook, Instagram, Twitter, Linkedin } from 'react-feather'
+import { AtSign, Instagram, Twitter, Linkedin } from 'react-feather'
 
 export const TopNavBar = () => {
     return (
@@ -14,19 +14,8 @@ export const TopNavBar = () => {
                 </nav>
 
                 <div className="flex items-center text-lg no-underline text-white pr-6">
-                    <a className="" href="#">
-                        <Facebook />
-                    </a>
-                    <a className="pl-6" href="#">
-                        <Instagram />
-                    </a>
-                    <a className="pl-6" href="#">
-                        <Twitter />
-                    </a>
-                    <a className="pl-6" href="#">
-                        <Linkedin />
-                    </a>
-                </div>
+                    <a href="/signup" class="block my-3 py-1.5 px-3 bg-blue-400 hover:bg-blue-300 text-blue-900 hover:text-blue-800 rounded transition duration-300">Sign Up</a>
+                    <a href="/login" class="block my-3 py-1.5 px-3 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 hover:text-yellow-800 rounded transition duration-300 ml-2">Login</a>                </div>
             </div>
 
         </nav>
