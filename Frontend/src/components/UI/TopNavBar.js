@@ -15,7 +15,7 @@ export const TopNavBar = () => {
 
                 <div className="flex items-center text-lg no-underline text-white pr-6">
                     <a href="/signup" class="block my-3 py-1.5 px-3 bg-blue-400 hover:bg-blue-300 text-blue-900 hover:text-blue-800 rounded transition duration-300">Sign Up</a>
-                    <a href="/login" class="block my-3 py-1.5 px-3 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 hover:text-yellow-800 rounded transition duration-300 ml-2">Login</a>                </div>
+                    <a href="/login" class="block my-3 py-1.5 px-3 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 hover:text-yellow-800 rounded transition duration-300 ml-2">Sign In</a></div>
             </div>
 
         </nav>

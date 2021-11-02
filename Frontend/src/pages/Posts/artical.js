@@ -29,7 +29,7 @@ let demodata = [{
     image: 'https://source.unsplash.com/collection/1346951/1000x500?sig=1',
     authorId: '232332'
 }]
-const Post = () => {
+const Artical = () => {
     return (
         <>
             <section className="w-full md:w-2/3 flex flex-col items-center px-3">
@@ -55,4 +55,4 @@ const Post = () => {
     )
 }
 
-export default Post
+export default Artical
