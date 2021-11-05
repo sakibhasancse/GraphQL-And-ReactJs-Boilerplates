@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { REGISTER_NEW_USER } from './graphql/createUser.graphql';
+import { REGISTER_NEW_USER } from './createUser.graphql';
 import { useMutation } from '@apollo/client'
 
 const Login = () => {
     //State
-    const [values, setValues] = useState({ email: '', password: '', name: '', phone: '' });
-    const [errors, setErrors] = useState({});
+    const [values, setValues] = useState({ email: 'sakibqa@gain.mail', password: 'aasdasdsad', name: 'Sakib Hasan', phone: '0176238121' });
+    const [errors, setErrors] = useState({ email: '', password: '', name: '', phone: '' });
 
     const validEmailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const { email, password, name, phone } = values;
@@ -29,7 +29,11 @@ const Login = () => {
                 NewErrors.name = value.length < 5 ? 'Name must be 5 characters long!' : '';
                 break;
             case 'email':
-                NewErrors.email = validEmailRegex.test(value) ? '' : 'Email is not valid!';
+                if (value) {
+                    NewErrors.email = validEmailRegex.test(value) ? '' : 'Email is not valid!';
+                } else {
+                    NewErrors.email = 'Email is required!';
+                }
                 break;
             case 'phone':
                 NewErrors.phone = value.length < 11 ? 'Phone Number must be 11 characters long!' : '';
@@ -47,11 +51,10 @@ const Login = () => {
 
     const HandleSubmit = async (e) => {
         e.preventDefault();
-        console.log({ values })
         if (email && password && name && phone) {
             const result = await createUser({
                 variables: {
-                    inputType: values
+                    inputData: values
                 }
             })
             if (result) console.log(result)
@@ -66,27 +69,27 @@ const Login = () => {
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
                             Full Name</label>
-                        <input value={name} name="name" onChange={HandleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="name" />
+                        <input value={name} name="name" onChange={(e) => HandleChange(e)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="name" />
                         <p className="text-red-500 text-xs italic">{errors && errors.name}</p>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
                             Phone Number</label>
-                        <input value={phone} name="phone" onChange={HandleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" type="text" placeholder="phone" />
+                        <input value={phone} name="phone" onChange={(e) => HandleChange(e)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" type="text" placeholder="phone" />
                         <p className="text-red-500 text-xs italic">{errors && errors.phone}</p>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="email">
                             Email</label>
-                        <input value={email} name="email" onChange={HandleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="email" />
+                        <input value={email} name="email" onChange={(e) => HandleChange(e)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="email" />
                         <p className="text-red-500 text-xs italic">{errors && errors.email}</p>
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="password">
                             Password
                      </label>
-                        <input value={password} name="password" onChange={HandleChange} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" />
-                        <p className="text-red-500 text-xs italic">{errors.password}</p>
+                        <input value={password} name="password" onChange={(e) => HandleChange(e)} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" />
+                        <p className="text-red-500 text-xs italic">{errors && errors.password}</p>
                     </div>
                     <div className="flex items-center justify-between">
                         <button disabled={disable} onClick={HandleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">

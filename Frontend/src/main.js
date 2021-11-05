@@ -6,14 +6,14 @@ import Navbar from './components/UI/Navbar';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 
-const NavRoute = ({ exact, path, component: Component }) => (
-    <Route exact={exact} path={path} render={(props) => (
-        <div>
-            <Navbar />
-            <Component {...props} />
-        </div>
-    )} />
-)
+// const NavRoute = ({ exact, path, component: Component }) => (
+//     <Route exact={exact} path={path} render={(props) => (
+//         <div>
+//             <Navbar />
+//             <Component {...props} />
+//         </div>
+//     )} />
+// )
 
 const Main = () => {
     return (

@@ -4,37 +4,65 @@ import { LOGIN_USER } from './loginUser.graphql';
 
 const Login = () => {
     //State
-    const [values, setValues] = useState({ email: '', password: '' });
-    const { errors, setErrors } = useState({})
+    const [values, setValues] = useState({ email: 'sakibqa@gain.mail', password: 'aasdasdsad' });
+    const [errors, setErrors] = useState({ email: '', password: '' });
 
-    const { email, password } = values;
     const validEmailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const { email, password } = values;
 
-    const [createUser] = useMutation(LOGIN_USER);
+    const Authentication = (data) => {
 
-    const handleChange = (e) => {
-        e.preventDefault();
-        const { name, value } = e.target;
+        if (data && data.loginUser && data.loginUser.token) {
+
+            localStorage.setItem('token', JSON.stringify(data.loginUser.token));
+        }
+    }
+
+    const [loginUser, { loading, error }] = useMutation(LOGIN_USER, {
+        onCompleted: (data) => Authentication(data)
+    })
+
+    if (error) {
+        console.log('error', error);
+    }
+    if (loading) {
+        console.log('Loading...')
+    }
+
+
+    const handleChange = (event) => {
+        event.preventDefault();
+        const { name, value } = event.target;
 
         let NewErrors = errors;
         switch (name) {
-
+            case 'name':
+                NewErrors.name = value.length < 5 ? 'Name must be 5 characters long!' : '';
+                break;
             case 'email':
-                NewErrors.email = validEmailRegex.test(value) ? '' : 'Email is not valid!';
+                if (value) {
+                    NewErrors.email = validEmailRegex.test(value) ? '' : 'Email is not valid!';
+                } else {
+                    NewErrors.email = 'Email is required!';
+                }
+                break;
+            case 'phone':
+                NewErrors.phone = value.length < 11 ? 'Phone Number must be 11 characters long!' : '';
                 break;
             case 'password': NewErrors.password = value.length < 8 ? 'Password must be 8 characters long!' : '';
                 break;
             default:
                 break;
         }
-        setValues({ ...values, name: value });
-        setErrors(NewErrors)
+
+        setValues({ ...values, [name]: value });
+        setErrors(NewErrors);
     }
 
     const HandleSubmit = async (event) => {
         event.preventDefault();
         if (email && password) {
-            const response = await createUser({
+            const response = await loginUser({
                 variables: {
                     inputData: values
                 }
@@ -50,16 +78,17 @@ const Login = () => {
             <div className="w-full justify-center max-w-xs mx-auto">
                 <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" for="username">
-                            email</label>
-                        <input value={email} name="email" onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Email" />
+                        <label className="block text-gray-700 text-sm font-bold mb-2" for="email">
+                            Email</label>
+                        <input value={email} name="email" autoComplete="off" onChange={(e) => handleChange(e)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="email" />
+                        <p className="text-red-500 text-xs italic">{errors && errors.email}</p>
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="password">
                             Password
                      </label>
-                        <input value={password} name="password" onChange={handleChange} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" />
-                        <p className="text-red-500 text-xs italic">Please choose a password.</p>
+                        <input value={password} name="password" autoComplete="off" onChange={(e) => handleChange(e)} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" />
+                        <p className="text-red-500 text-xs italic">{errors && errors.password}</p>
                     </div>
                     <div className="flex items-center justify-between">
                         <button onClick={HandleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
