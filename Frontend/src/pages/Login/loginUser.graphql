@@ -1,0 +1,12 @@
+mutation LOGIN_USER($inputData: CreateUserInputType) {
+  loginUser(inputData: $inputData) {
+    token
+    user {
+      id
+      name
+      email
+      phone
+      role
+    }
+  }
+}

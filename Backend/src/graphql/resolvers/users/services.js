@@ -7,9 +7,11 @@ const createUserToken = (userId) => {
     return jwt.sign({ userId }, config.jwt_secret, { expiresIn: config.jwt_expire_time })
 }
 
-const addNewUser = async (args) => {
-    const { email, name, phone, password } = args;
-    const isUser = await Users.findOne({ email: email });
+const addNewUser = async (parent, args) => {
+    const { email, name, phone, password } = args?.inputData;
+    console.log({ args, email, name, phone, password });
+
+    const isUser = await Users.findOne({ email });
     if (isUser) throw new Error(`User already exists with ${email}`);
     const newPassword = await bcrypt.hash(password, 10);
     const newUser = new Users({
@@ -20,9 +22,9 @@ const addNewUser = async (args) => {
     return { token, user }
 }
 
-const loginUser = async (args) => {
+const loginUser = async (parent, args) => {
 
-    const { email, password } = args;
+    const { email, password } = args?.inputData;
     const isUser = await Users.findOne({ email: email });
     if (!isUser) throw new Error(`User not exists with ${email}`);
     const isValidUser = await bcrypt.compare(password, isUser.password);
@@ -39,4 +41,8 @@ const updateUser = async (parent, args, context) => {
     return isUpdate;
 }
 
+const getUsers = async (parent, args, context) => {
+    console.log({ parent, args });
+    return Users.findOne({ _id: parent._id })
+}
 export { addNewUser, loginUser, updateUser }

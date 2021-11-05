@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
+import { REGISTER_NEW_USER } from './graphql/createUser.graphql';
+import { useMutation } from '@apollo/client'
 
 const Login = () => {
     //State
-    const [values, setValues] = useState({ email: '', password: '', name: '' });
+    const [values, setValues] = useState({ email: '', password: '', name: '', phone: '' });
     const [errors, setErrors] = useState({});
 
     const validEmailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const { email, password, name } = values;
+    const { email, password, name, phone } = values;
+
+    const [createUser, { loading, error }] = useMutation(REGISTER_NEW_USER)
+
+    if (error) {
+        console.log('error', error);
+    }
+    if (loading) {
+        console.log('Loading...')
+    }
 
     const HandleChange = (event) => {
         event.preventDefault();
@@ -20,6 +31,9 @@ const Login = () => {
             case 'email':
                 NewErrors.email = validEmailRegex.test(value) ? '' : 'Email is not valid!';
                 break;
+            case 'phone':
+                NewErrors.phone = value.length < 11 ? 'Phone Number must be 11 characters long!' : '';
+                break;
             case 'password': NewErrors.password = value.length < 8 ? 'Password must be 8 characters long!' : '';
                 break;
             default:
@@ -29,14 +43,22 @@ const Login = () => {
         setValues({ ...values, [name]: value });
         setErrors(NewErrors);
     }
-    const disable = errors && (errors.email || errors.password || errors.password) ? true : false;
+    const disable = errors && (errors.email || errors.password || errors.password || errors.phone) ? true : false;
 
-    const HandleSubmit = (e) => {
+    const HandleSubmit = async (e) => {
         e.preventDefault();
+        console.log({ values })
+        if (email && password && name && phone) {
+            const result = await createUser({
+                variables: {
+                    inputType: values
+                }
+            })
+            if (result) console.log(result)
+        }
 
     }
 
-    console.log({ disable })
     return (
         <div className="w-full container mx-auto pt-5">
             <div className="w-full justify-center max-w-xs mx-auto">
@@ -44,13 +66,19 @@ const Login = () => {
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
                             Full Name</label>
-                        <input value={name} name="name" onChange={HandleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="name" />
+                        <input value={name} name="name" onChange={HandleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="name" />
                         <p className="text-red-500 text-xs italic">{errors && errors.name}</p>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" for="name">
+                            Phone Number</label>
+                        <input value={phone} name="phone" onChange={HandleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" type="text" placeholder="phone" />
+                        <p className="text-red-500 text-xs italic">{errors && errors.phone}</p>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="email">
                             Email</label>
-                        <input value={email} name="email" onChange={HandleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="email" placeholder="email" />
+                        <input value={email} name="email" onChange={HandleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="email" />
                         <p className="text-red-500 text-xs italic">{errors && errors.email}</p>
                     </div>
                     <div className="mb-6">

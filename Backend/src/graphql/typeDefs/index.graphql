@@ -25,8 +25,8 @@ type Query {
 }
 
 type Mutation {
-  createUser(createUserInputType: CreateUserInputType): AuthPayload!
-  loginUser(loginUserInputType: LoginUserInputType): AuthPayload!
+  createUser(inputData: CreateUserInputType): AuthPayload!
+  loginUser(inputData: LoginUserInputType): AuthPayload!
   updateUser(updateUserInputType: UpdateUserInputType): AuthPayload!
   createPost(createPostInputType: CreatePostInputType): Posts!
   deletePost(id: ID!, author: ID!): Posts!

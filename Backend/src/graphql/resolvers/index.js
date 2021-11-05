@@ -3,7 +3,7 @@ import { postMutations, postQuerys } from './posts';
 import { userMutations, userQuerys } from './users';
 import { PostsQuery } from './posts/services';
 import { CommentsQuery } from './comments/commnet-services';
-// import { UsersQuery } from './users/services';
+import { UsersQuery } from './users/services';
 
 
 const resolvers = {

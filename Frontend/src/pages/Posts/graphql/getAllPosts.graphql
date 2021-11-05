@@ -1,0 +1,19 @@
+query GET_ALL_POSTS {
+  getPosts {
+    id
+    title
+
+    comments {
+      id
+      text
+      author {
+        id
+      }
+    }
+    author {
+      id
+      email
+      name
+    }
+  }
+}

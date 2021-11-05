@@ -1,12 +1,47 @@
 import React, { useState } from 'react';
-
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from './loginUser.graphql';
 
 const Login = () => {
-    const [valuse, setValues] = useState({ email: '', password: '' });
-    const { email, password } = valuse;
+    //State
+    const [values, setValues] = useState({ email: '', password: '' });
+    const { errors, setErrors } = useState({})
+
+    const { email, password } = values;
+    const validEmailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    const [createUser] = useMutation(LOGIN_USER);
 
     const handleChange = (e) => {
-        console.log(e.target.value);
+        e.preventDefault();
+        const { name, value } = e.target;
+
+        let NewErrors = errors;
+        switch (name) {
+
+            case 'email':
+                NewErrors.email = validEmailRegex.test(value) ? '' : 'Email is not valid!';
+                break;
+            case 'password': NewErrors.password = value.length < 8 ? 'Password must be 8 characters long!' : '';
+                break;
+            default:
+                break;
+        }
+        setValues({ ...values, name: value });
+        setErrors(NewErrors)
+    }
+
+    const HandleSubmit = async (event) => {
+        event.preventDefault();
+        if (email && password) {
+            const response = await createUser({
+                variables: {
+                    inputData: values
+                }
+            })
+            console.log({ response })
+        }
+
     }
 
 
@@ -17,17 +52,17 @@ const Login = () => {
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="username">
                             email</label>
-                        <input value={email} type="email" onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" />
+                        <input value={email} name="email" onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Email" />
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="password">
                             Password
                      </label>
-                        <input value={password} type="password" onChange={handleChange} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" />
+                        <input value={password} name="password" onChange={handleChange} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" />
                         <p className="text-red-500 text-xs italic">Please choose a password.</p>
                     </div>
                     <div className="flex items-center justify-between">
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        <button onClick={HandleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                             Sign In
                                </button>
                         <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">

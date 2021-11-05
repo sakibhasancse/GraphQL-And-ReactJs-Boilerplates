@@ -1,5 +1,7 @@
-import React from 'react';
-import { ArrowRight } from 'react-feather'
+import { useLazyQuery } from '@apollo/client';
+import React, { useEffect } from 'react';
+import { ArrowRight } from 'react-feather';
+import { GET_ALL_POSTS } from './graphql/getAllPosts.graphql'
 
 let demodata = [{
     _id: '1',
@@ -30,6 +32,17 @@ let demodata = [{
     authorId: '232332'
 }]
 const Artical = () => {
+    console.log('Artical')
+    const [getPosts] = useLazyQuery(GET_ALL_POSTS, {
+        onCompleted: (data) => {
+            console.log({ data })
+        }
+
+    })
+    console.log('Artical2')
+    useEffect(() => {
+        getPosts();
+    }, [getPosts])
     return (
         <>
             <section className="w-full md:w-2/3 flex flex-col items-center px-3">
