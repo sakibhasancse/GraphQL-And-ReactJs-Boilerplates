@@ -18,10 +18,12 @@ import SignUp from './pages/SignUp';
 const Main = () => {
     return (
         <Router>
-            <Navbar />
+            <Switch>
+                <Route path="/dashboard" component={Dashboard} />
+            </Switch>
+            {/* <Navbar /> */}
             <Switch>
                 <Route path="/" exact component={Posts} />
-                <Route path="/dashboard" component={Dashboard} />
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={SignUp} />
             </Switch>

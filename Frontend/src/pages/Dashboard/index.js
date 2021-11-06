@@ -21,7 +21,7 @@ import DashboardCard12 from '@/components/partials/dashboard/DashboardCard12';
 import DashboardCard13 from '@/components/partials/dashboard/DashboardCard13';
 import Banner from '@/components/partials/Banner';
 
-function Dashboard() {
+const Dashboard = () => {
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
 

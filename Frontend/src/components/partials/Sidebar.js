@@ -1,14 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-function Sidebar({
+const Sidebar = ({
   sidebarOpen,
   setSidebarOpen
-}) {
+}) => {
 
-  const location = useLocation();
-  const { pathname } = location;
-  const page = pathname.split('/')[1];
+  // const location = useLocation();
+  // const { pathname } = location;
+  // const page = pathname && pathname.split('/')[1];
+  const page = '/'
 
   const trigger = useRef(null);
   const sidebar = useRef(null);
