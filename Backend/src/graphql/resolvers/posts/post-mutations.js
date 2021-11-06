@@ -1,5 +1,5 @@
 import Authentication from '../../../utils/Auth'
-import { logger } from '../../../utils/logger';
+import { logger } from '@/utils/logger';
 import { createNewPost, deletePost } from './services'
 const postMutation = {
     // create a new Posts

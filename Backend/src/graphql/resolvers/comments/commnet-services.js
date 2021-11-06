@@ -1,6 +1,6 @@
 import { AuthenticationError, UserInputError } from 'apollo-server-errors';
 import { Comments, Users, Posts } from '../../models';
-import Authentication from '../../../utils/Auth';
+import Authentication from '@/utils/Auth';
 
 const createComment = async (_, args, context) => {
 

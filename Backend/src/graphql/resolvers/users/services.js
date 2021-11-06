@@ -2,7 +2,7 @@ import { Users, Posts, Comments } from '../../models'
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import config from '../../../config'
-import { logger } from '../../../utils/logger';
+import { logger } from '@/utils/logger';
 
 const createUserToken = (userId) => {
     return jwt.sign({ userId }, config.jwt_secret, { expiresIn: config.jwt_expire_time })

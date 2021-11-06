@@ -1,7 +1,7 @@
 import { Posts, Users, Comments } from '../../models';
 import slugify from 'slugify';
 import { map } from 'lodash'
-import { logger } from '../../../utils/logger';
+import { logger } from '@/utils/logger';
 
 const createNewPost = async (args, userId) => {
     console.log('Creating new post')
@@ -22,7 +22,7 @@ const createNewPost = async (args, userId) => {
 }
 
 const deletePost = async (parent, args, context) => {
-    logger.info(`Delete post ${args?.postId }`)
+    logger.info(`Delete post ${args?.postId}`)
     const isPost = Posts.find({ _id: args?.postId });
     if (isPost) throw new Error(`Post not found with id ${args.id}`)
     const isUser = Users.find({ _id: args?.author });
