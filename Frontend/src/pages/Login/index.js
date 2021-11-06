@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from './loginUser.graphql';
+import { Redirect } from 'react-router';
 
 const Login = () => {
+
     //State
     const [values, setValues] = useState({ email: 'sakibqa@gain.mail', password: 'aasdasdsad' });
     const [errors, setErrors] = useState({ email: '', password: '' });
@@ -10,17 +12,17 @@ const Login = () => {
     const validEmailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const { email, password } = values;
 
-    const Authentication = (data) => {
-
-        if (data && data.loginUser && data.loginUser.token) {
-
-            localStorage.setItem('token', JSON.stringify(data.loginUser.token));
-        }
-    }
-
-    const [loginUser, { loading, error }] = useMutation(LOGIN_USER, {
-        onCompleted: (data) => Authentication(data)
+    const [loginUser, { loading, error, data }] = useMutation(LOGIN_USER, {
+        fetchPolicy: "no-cache"
     })
+
+    // Store token if login is successful
+    if (data && data.loginUser && data.loginUser.token) {
+        localStorage.setItem('token', JSON.stringify(data.loginUser.token));
+
+        //Redirect to home page
+        return <Redirect to='/' />
+    }
 
     if (error) {
         console.log('error', error);
