@@ -1,5 +1,5 @@
 import { useLazyQuery } from '@apollo/client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowRight } from 'react-feather';
 import { GET_ALL_POSTS } from './graphql/getAllPosts.graphql'
 
@@ -32,21 +32,22 @@ let demodata = [{
     authorId: '232332'
 }]
 const Artical = () => {
-    console.log('Artical')
+    const [postLists, setPostLists] = useState([])
     const [getPosts] = useLazyQuery(GET_ALL_POSTS, {
         onCompleted: (data) => {
-            console.log({ data })
+            if (data) {
+                setPostLists(data.getPosts)
+            }
         }
-
     })
-    console.log('Artical2')
+    console.log(postLists)
     useEffect(() => {
         getPosts();
     }, [getPosts])
     return (
         <>
             <section className="w-full md:w-2/3 flex flex-col items-center px-3">
-                {demodata && demodata.map((item, index) => (
+                {postLists && postLists.map((item, index) => (
                     <artical className="flex flex-col shadow my-4">
                         <a href={`/${item.slug}`} className="hover:opacity-75">
                             <img src={item.image} alt={item.title} />
