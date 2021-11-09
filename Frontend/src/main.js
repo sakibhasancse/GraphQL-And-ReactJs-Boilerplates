@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Navbar from './components/UI/Navbar';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import Privateroute from './pages/Private-route';
 
 // const NavRoute = ({ exact, path, component: Component }) => (
 //     <Route exact={exact} path={path} render={(props) => (
@@ -19,13 +20,27 @@ const Main = () => {
     return (
         <Router>
             <Switch>
-                <Route path="/dashboard" component={Dashboard} />
-            </Switch>
-            {/* <Navbar /> */}
-            <Switch>
-                <Route path="/" exact component={Posts} />
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={SignUp} />
+                <Route path="/*" render={(props) => {
+                    const pathname = props && props.location && props.location.pathname;
+                    if (pathname === '/login' || pathname === '/register') {
+                        return ''
+                    }
+                    return <Navbar />
+                }} />
+
+                {/* <Route path="/*" render={(props) => {
+                    const pathname = props && props.location && props.location.pathname;
+                    if (pathname === '/login' || pathname === '/register') {
+                        return ''
+                    }
+                    return < />
+
+                    return <Navbar />
+                }} /> */}
+                <Route path="/" component={Posts} />
+                <Privateroute path="/dashboard" exect component={Dashboard} />
             </Switch>
         </Router>
     )

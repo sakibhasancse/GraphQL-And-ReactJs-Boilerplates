@@ -1,7 +1,7 @@
 import { Posts, Users, Comments } from '../../models';
 import slugify from 'slugify';
 import { map } from 'lodash'
-import { logger } from '@/utils/logger';
+import { logger } from '../../../utils/logger'
 
 const createNewPost = async (args, userId) => {
     console.log('Creating new post')

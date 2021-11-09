@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from './loginUser.graphql';
 import { Redirect } from 'react-router';
+import Cookies from 'js-cookie';
 
 const Login = () => {
 
@@ -19,6 +20,7 @@ const Login = () => {
     // Store token if login is successful
     if (data && data.loginUser && data.loginUser.token) {
         localStorage.setItem('token', JSON.stringify(data.loginUser.token));
+        Cookies.set('authToken', JSON.stringify(data.loginUser.token))
 
         //Redirect to home page
         return <Redirect to='/' />
