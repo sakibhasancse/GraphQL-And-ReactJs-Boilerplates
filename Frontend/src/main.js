@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Posts from './pages/Posts';
 import Dashboard from './pages/Dashboard';
 import Navbar from './components/UI/Navbar';
@@ -16,34 +16,31 @@ import Privateroute from './pages/Private-route';
 //     )} />
 // )
 
-const Main = () => {
-    return (
-        <Router>
-            <Switch>
-                <Route path="/login" component={Login} />
-                <Route path="/signup" component={SignUp} />
-                <Route path="/*" render={(props) => {
-                    const pathname = props && props.location && props.location.pathname;
-                    if (pathname === '/login' || pathname === '/register') {
-                        return ''
+const Main = () => (
+    <Router>
+        <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={SignUp} />
+            <Route
+                path="/*"
+                render={(props) => {
+                    if (props.location.pathname === '/signup') {
+                        return '';
                     }
-                    return <Navbar />
-                }} />
-
-                {/* <Route path="/*" render={(props) => {
-                    const pathname = props && props.location && props.location.pathname;
-                    if (pathname === '/login' || pathname === '/register') {
-                        return ''
+                    if (props.location.pathname === '/login') {
+                        return '';
                     }
-                    return < />
+                    return <Navbar />;
+                }}
+            />
+            <Route exact path="/">
+                <Redirect to="/posts" />
+            </Route>
+            <Route path="/posts" component={Posts} />
+            <Privateroute path="/dashboard" exect component={Dashboard} />
+        </Switch>
+    </Router>
+)
 
-                    return <Navbar />
-                }} /> */}
-                <Route path="/" component={Posts} />
-                <Privateroute path="/dashboard" exect component={Dashboard} />
-            </Switch>
-        </Router>
-    )
-}
 
 export default Main;
