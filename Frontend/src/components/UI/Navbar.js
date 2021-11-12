@@ -5,7 +5,7 @@ import { TopNavBar } from './TopNavBar'
 const Navbar = () => {
     return (
         <div>
-            {/* <TopNavBar />
+            <TopNavBar />
             <Header />
             <nav className="w-full py-4 border-t border-b bg-gray-100">
                 <div className="block sm:hidden">
@@ -21,8 +21,8 @@ const Navbar = () => {
                         <a href="#" className="hover:bg-gray-400 rounded py-2 px-4 mx-2">Sports</a>
                     </div>
                 </div>
-            </nav> */}
-Navbar
+            </nav>
+
         </div>
     )
 }

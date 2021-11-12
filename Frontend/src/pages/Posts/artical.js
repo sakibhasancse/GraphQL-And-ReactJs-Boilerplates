@@ -40,7 +40,7 @@ const Artical = () => {
             }
         }
     })
-    console.log(postLists)
+
     useEffect(() => {
         getPosts();
     }, [getPosts])

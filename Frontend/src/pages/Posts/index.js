@@ -7,7 +7,6 @@ import { SidNavBar } from '../../components/UI/SidNavBar';
 const Posts = () => {
     return (
         <div>
-            Hello
             <div className="container mx-auto flex flex-wrap py-6 pb-20">
                 <Artical />
                 <SidNavBar />

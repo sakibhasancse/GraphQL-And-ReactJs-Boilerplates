@@ -18,10 +18,11 @@ import Privateroute from './pages/Private-route';
 
 const Main = () => (
     <Router>
+        <Navbar />
         <Switch>
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUp} />
-            <Route
+            {/* <Route
                 path="/*"
                 render={(props) => {
                     if (props.location.pathname === '/signup') {
@@ -32,7 +33,7 @@ const Main = () => (
                     }
                     return <Navbar />;
                 }}
-            />
+            /> */}
             <Route exact path="/">
                 <Redirect to="/posts" />
             </Route>
