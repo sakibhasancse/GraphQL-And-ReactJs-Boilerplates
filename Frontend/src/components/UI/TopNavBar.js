@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { size } from 'lodash';
 import { Link } from "react-router-dom";
 import { isAuthorized } from '@/utils/Auth';
-import { logout } from '../../utils/Auth';
+import { logout } from '@/utils/Auth';
 
 
 export const TopNavBar = () => {
+
+    useEffect(() => {
+        isAuthorized()
+    }, [isAuthorized]);
+
     return (
         <nav className="w-full py-4 bg-blue-800 shadow">
             <div className="w-full container mx-auto flex flex-wrap items-center justify-between">
@@ -17,10 +23,10 @@ export const TopNavBar = () => {
                 </nav>
 
                 <div className="flex items-center text-lg no-underline text-white pr-6">
-                    {isAuthorized ? (
+                    {size(isAuthorized()) ? (
                         <>
                             <Link to="/dashboard" class="block my-3 py-1.5 px-3 bg-green-400 hover:bg-yellow-300 text-yellow-900 hover:text-yellow-800 rounded transition duration-300 ml-2">Dashboard</Link>
-                            <a onClick={logout()} href="/login" class="block my-3 py-1.5 px-3 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 hover:text-yellow-800 rounded transition duration-300 ml-2">logout</a>
+                            <a onClick={logout} href="/login" class="block my-3 py-1.5 px-3 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 hover:text-yellow-800 rounded transition duration-300 ml-2">logout</a>
                         </>
                     ) : (
                         <>

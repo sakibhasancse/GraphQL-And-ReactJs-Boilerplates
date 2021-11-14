@@ -69,7 +69,7 @@ const Dashboard = () => {
                         {/* Cards */}
                         <div className="grid grid-cols-12 gap-6">
 
-                            {/* Line chart (Acme Plus) */}
+                            Line chart (Acme Plus)
                             <DashboardCard01 />
                             {/* Line chart (Acme Advanced) */}
                             <DashboardCard02 />
