@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ImageUploading from 'react-images-uploading';
 
-const UploadImage = () => {
+const UploadImage = ({ callback }) => {
     const [images, setImages] = React.useState([]);
     const maxNumber = 69;
 
     const onChange = (imageList, addUpdateIndex) => {
         // data for submit
-        console.log(imageList, addUpdateIndex);
+        // console.log(imageList, addUpdateIndex);
         setImages(imageList);
     };
 
+    useEffect(() => {
+        if (callback) {
+            callback(images)
+        }
+    }, [callback])
     return (
         <div className="App">
             <ImageUploading

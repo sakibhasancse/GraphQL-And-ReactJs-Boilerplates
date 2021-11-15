@@ -18,18 +18,34 @@ const CreatePost = () => {
             default:
                 break;
         }
-
+    }
+    const handleImageChange = (imageList) => {
+        console.log('calling')
+        console.log({ imageList })
     }
     return (
-        <div class="container mx-auto ">
+        <div class="container mx-auto">
             <div class="w-24 min-w-full py-8">
                 Create a new post
             </div>
+            <div className="flex flex-col mb-4">
+                <label className="mb-2 uppercase font-bold text-lg text-grey-darkest" for="post title">Tilte of the Post</label>
+                <input className="placeholder-gray-500 px-8  w-full border rounded py-2 text-gray-700 focus:outline-none items-center" name="title" value={title} onChange={(e) => handleChange(e)} placeholder="Post title ..." />
+            </div>
 
-            <input class="placeholder-gray-500" name="title" value={title} onChange={(e) => handleChange(e)} placeholder="Post title ..." />
-            <CreateAndUpdatePosts initialValue="Hello" limit="300" />
-            <UploadImage />
-            <button class="">Post</button>
+            <div>
+                <label className="mb-4 uppercase font-bold text-lg text-grey-darkest" for="post description">Description of the post</label>
+                <CreateAndUpdatePosts initialValue="Hello" limit="300" />
+            </div>
+
+            <div className="flex flex-col mb-6">
+                <label className="mb-4 uppercase font-bold text-lg text-grey-darkest" for="post description">Image of the post</label>
+                <UploadImage callback={handleImageChange} />
+            </div>
+
+            <button type="submit"
+                class="w-full mt-6 py-2 rounded bg-blue-500 text-gray-100 focus:outline-none">Create</button>
+
         </div>
     );
 }
