@@ -15,7 +15,7 @@ const UploadImage = ({ callback }) => {
         if (callback) {
             callback(images)
         }
-    }, [callback])
+    }, [callback, onChange])
     return (
         <div className="App">
             <ImageUploading

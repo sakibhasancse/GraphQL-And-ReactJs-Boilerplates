@@ -4,8 +4,9 @@ import { createNewPost, deletePost } from './services'
 const postMutation = {
     // create a new Posts
     createPost: (parent, args, context) => {
-        logger.info(`Create new Post`);
         const { userId } = Authentication(context);
+        logger.info(`Create new Post`);
+
         return createNewPost(args?.inputData, userId)
     },
     // delete a post

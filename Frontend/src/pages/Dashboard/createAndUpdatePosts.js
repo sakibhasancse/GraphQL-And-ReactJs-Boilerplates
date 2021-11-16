@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
-const CreateAndUpdatePosts = ({ initialValue, limit }) => {
+const CreateAndUpdatePosts = ({ initialValue, limit, callback }) => {
     const sizeLimit = limit ?? 50;
     const [value, setValue] = useState(initialValue ?? '');
     const [length, setLength] = useState(0);
@@ -12,7 +12,7 @@ const CreateAndUpdatePosts = ({ initialValue, limit }) => {
     };
 
     const handleUpdate = (value, editor) => {
-        console.log(editor.getContent())
+        callback(editor.getContent())
         const length = editor.getContent({ format: 'text' }).length;
         if (length <= sizeLimit) {
             setValue(value);

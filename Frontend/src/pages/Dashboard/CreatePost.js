@@ -3,14 +3,29 @@ import React, { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import CreateAndUpdatePosts from './createAndUpdatePosts';
 import UploadImage from './ImageUpload';
-
+import { size } from 'lodash';
+import { useMutation } from '@apollo/client';
+import { CREATE_POST } from './graphql/createPost.graphql';
 const CreatePost = () => {
     const [title, setTitle] = useState('');
+    const [imageList, setImageList] = useState([]);
+    const [description, setDescription] = useState('');
+
+    const [createPost, { loading, error }] = useMutation(CREATE_POST, {
+        variables: {
+            inputData: {
+                title,
+                description,
+                published: true,
+                author: "616178a2a675125d8da6d995",
+                // images: setImageList
+            }
+        }
+    })
 
     const handleChange = (event) => {
         event.preventDefault();
         const { name, value } = event.target;
-
         switch (name) {
             case 'title':
                 setTitle(value);
@@ -20,9 +35,20 @@ const CreatePost = () => {
         }
     }
     const handleImageChange = (imageList) => {
-        console.log('calling')
-        console.log({ imageList })
+        setImageList(imageList)
     }
+    const handleDescription = (description) => {
+        console.log({ description })
+        setDescription(description)
+    }
+    const btnDisable = imageList && description && size(title);
+
+    const handleSubmit = async () => {
+        const response = await createPost();
+        console.log({ response })
+        console.log({ title, description, imageList })
+    }
+
     return (
         <div class="container mx-auto">
             <div class="w-24 min-w-full py-8">
@@ -35,7 +61,7 @@ const CreatePost = () => {
 
             <div>
                 <label className="mb-4 uppercase font-bold text-lg text-grey-darkest" for="post description">Description of the post</label>
-                <CreateAndUpdatePosts initialValue="Hello" limit="300" />
+                <CreateAndUpdatePosts initialValue="Hello" limit="300" callback={handleDescription} />
             </div>
 
             <div className="flex flex-col mb-6">
@@ -43,10 +69,10 @@ const CreatePost = () => {
                 <UploadImage callback={handleImageChange} />
             </div>
 
-            <button type="submit"
-                class="w-full mt-6 py-2 rounded bg-blue-500 text-gray-100 focus:outline-none">Create</button>
-
-        </div>
+            <button onClick={() => handleSubmit()}
+                disabled={btnDisable ? false : true}
+                className={`w-full mt-6 py-2 rounded bg-blue-500 text-gray-100 focus:outline-none ${btnDisable ? "" : "cursor-not-allowed"}`}>Create</button>
+        </div >
     );
 }
 
