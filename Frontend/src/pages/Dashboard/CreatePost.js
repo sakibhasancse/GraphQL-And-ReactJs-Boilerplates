@@ -6,7 +6,10 @@ import UploadImage from './ImageUpload';
 import { size } from 'lodash';
 import { useMutation } from '@apollo/client';
 import { CREATE_POST } from './graphql/createPost.graphql';
+import { toastCall, toastConfig } from '@/utils/toastConfig'
+
 const CreatePost = () => {
+    toastConfig()
     const [title, setTitle] = useState('');
     const [imageList, setImageList] = useState([]);
     const [description, setDescription] = useState('');
@@ -18,10 +21,19 @@ const CreatePost = () => {
                 description,
                 published: true,
                 author: "616178a2a675125d8da6d995",
-                // images: setImageList
+                // images: imageList
             }
         }
     })
+
+    if (error) {
+        console.log('error', error);
+        toastCall('error', 'Faild to create post', 'top-right')
+    }
+
+    if (loading) {
+        console.log('loading...')
+    }
 
     const handleChange = (event) => {
         event.preventDefault();
@@ -34,19 +46,23 @@ const CreatePost = () => {
                 break;
         }
     }
+
     const handleImageChange = (imageList) => {
         setImageList(imageList)
     }
+
     const handleDescription = (description) => {
-        console.log({ description })
         setDescription(description)
     }
+
     const btnDisable = imageList && description && size(title);
 
     const handleSubmit = async () => {
         const response = await createPost();
-        console.log({ response })
-        console.log({ title, description, imageList })
+        if (response) {
+            if (response.data) toastCall('success', 'Post created successfully', 'top-right')
+            else if (response.errors) toastCall('error', 'Faild to create post', 'top-right')
+        }
     }
 
     return (

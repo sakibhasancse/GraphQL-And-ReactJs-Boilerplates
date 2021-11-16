@@ -7,6 +7,7 @@ type Posts {
   author: Users!
   comments: [Comments!]!
 }
+
 input CreatePostInputType {
   title: String!
   description: String!

@@ -2,7 +2,8 @@ query GET_ALL_POSTS {
   getPosts {
     id
     title
-
+    description
+    slug
     comments {
       id
       text

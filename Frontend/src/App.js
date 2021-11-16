@@ -3,6 +3,7 @@ import { ApolloProvider } from '@apollo/client';
 import client from './apollo';
 import Handler from './main';
 import './App.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
