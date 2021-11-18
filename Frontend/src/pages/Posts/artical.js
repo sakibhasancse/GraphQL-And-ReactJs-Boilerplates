@@ -33,7 +33,7 @@ let demodata = [{
 }]
 const Artical = () => {
     const [postLists, setPostLists] = useState([{}]);
-
+    console.log({ postLists })
     const [getPosts] = useLazyQuery(GET_ALL_POSTS, {
         errorPolicy: 'all',
         fetchPolicy: 'no-cache',
@@ -63,7 +63,7 @@ const Artical = () => {
                         <a href={`/${item.slug}`} className="text-blue-700 text-sm font-bold uppercase pb-4">{item.category}</a>
                         <a href={`/${item.slug}`} className="text-3xl font-bold hover:text-gray-700 pb-4">{item.title}</a>
                         <p className="text-sm pb-3">
-                            By <a href={`/${item.authorId}`}>{item.author}</a>, Published on Aprill 2021
+                            By <a href="/">{item.author && item.author.name || ''}</a>, Published on Aprill 2021
                             </p>
                         <span className="pb-6">{item.description || ''}</span>
                         <a href={`/${item.slug}`} className="flex uppercase text-gray-800 hover:text-black">Continue Reading <ArrowRight /></a>
